@@ -1,0 +1,6 @@
+﻿cl : command line  warning D9035: option 'Gm' has been deprecated and will be removed in a future release
+  Lab7_Drones_Project.cpp
+C:\Users\e_sid\Desktop\TL-Engine Projects\Lab7\Lab7_Drones_Project\Lab7_Drones_Project.cpp(19,2): warning C4091: 'typedef ': ignored on left of 'Vector3' when no variable is declared
+C:\Users\e_sid\Desktop\TL-Engine Projects\Lab7\Lab7_Drones_Project\Lab7_Drones_Project.cpp(92,10): warning C4101: 'bullet': unreferenced local variable
+  Lab7_Drones_Project.vcxproj -> C:\Users\e_sid\Desktop\TL-Engine Projects\Lab7\Lab7_Drones_Project\Lab7_Drones_ProjectDebug.exe
+  Copying DLLs & shaders...

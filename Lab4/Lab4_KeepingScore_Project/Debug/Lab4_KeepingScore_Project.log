@@ -1,0 +1,7 @@
+﻿cl : command line  warning D9035: option 'Gm' has been deprecated and will be removed in a future release
+  Lab4_KeepingScore_Project.cpp
+TL-Engine2019Debug.lib(TLXEngine.obj) : warning LNK4099: PDB '' was not found with 'TL-Engine2019Debug.lib(TLXEngine.obj)' or at ''; linking object as if no debug info
+TL-Engine2019Debug.lib(IrrlichtSceneNode.obj) : warning LNK4099: PDB '' was not found with 'TL-Engine2019Debug.lib(IrrlichtSceneNode.obj)' or at ''; linking object as if no debug info
+TL-Engine2019Debug.lib(IrrlichtEngine.obj) : warning LNK4099: PDB '' was not found with 'TL-Engine2019Debug.lib(IrrlichtEngine.obj)' or at ''; linking object as if no debug info
+  Lab4_KeepingScore_Project.vcxproj -> C:\Users\e_sid\Desktop\TL-Engine Projects\Lab4\Lab4_KeepingScore_Project\Lab4_KeepingScore_ProjectDebug.exe
+  Copying DLLs & shaders...

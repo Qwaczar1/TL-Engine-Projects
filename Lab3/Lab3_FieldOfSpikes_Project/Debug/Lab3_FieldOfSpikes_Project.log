@@ -1,0 +1,8 @@
+﻿cl : command line  warning D9035: option 'Gm' has been deprecated and will be removed in a future release
+  Lab3_FieldOfSpikes_Project.cpp
+C:\Users\e_sid\Desktop\TL-Engine Projects\Lab3\Lab3_FieldOfSpikes_Project\Lab3_FieldOfSpikes_Project.cpp(10,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+C:\Users\e_sid\Desktop\TL-Engine Projects\Lab3\Lab3_FieldOfSpikes_Project\Lab3_FieldOfSpikes_Project.cpp(11,37): warning C4244: 'return': conversion from 'int' to 'float', possible loss of data
+C:\Users\e_sid\Desktop\TL-Engine Projects\Lab3\Lab3_FieldOfSpikes_Project\Lab3_FieldOfSpikes_Project.cpp(63,46): warning C4244: 'argument': conversion from 'int' to 'const float', possible loss of data
+C:\Users\e_sid\Desktop\TL-Engine Projects\Lab3\Lab3_FieldOfSpikes_Project\Lab3_FieldOfSpikes_Project.cpp(63,37): warning C4244: 'argument': conversion from 'int' to 'const float', possible loss of data
+C:\Users\e_sid\Desktop\TL-Engine Projects\Lab3\Lab3_FieldOfSpikes_Project\Lab3_FieldOfSpikes_Project.cpp(82,27): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+C:\Users\e_sid\Desktop\TL-Engine Projects\Lab3\Lab3_FieldOfSpikes_Project\Lab3_FieldOfSpikes_Project.cpp(20): error C4716: 'vector2Distance': must return a value

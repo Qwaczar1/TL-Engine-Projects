@@ -1,0 +1,9 @@
+﻿cl : command line  warning D9035: option 'Gm' has been deprecated and will be removed in a future release
+  Lab5_GravityCube_Project.cpp
+C:\Users\e_sid\Desktop\TL-Engine Projects\Lab5\Lab5_GravityCube_Project\Lab5_GravityCube_Project.cpp(10,2): warning C4091: 'typedef ': ignored on left of 'xyzPos' when no variable is declared
+C:\Users\e_sid\Desktop\TL-Engine Projects\Lab5\Lab5_GravityCube_Project\Lab5_GravityCube_Project.cpp(13,37): warning C4244: 'return': conversion from 'int' to 'float', possible loss of data
+C:\Users\e_sid\Desktop\TL-Engine Projects\Lab5\Lab5_GravityCube_Project\Lab5_GravityCube_Project.cpp(39,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+C:\Users\e_sid\Desktop\TL-Engine Projects\Lab5\Lab5_GravityCube_Project\Lab5_GravityCube_Project.cpp(110,29): warning C4244: 'argument': conversion from 'double' to 'const float', possible loss of data
+C:\Users\e_sid\Desktop\TL-Engine Projects\Lab5\Lab5_GravityCube_Project\Lab5_GravityCube_Project.cpp(115,29): warning C4244: 'argument': conversion from 'double' to 'const float', possible loss of data
+  Lab5_GravityCube_Project.vcxproj -> C:\Users\e_sid\Desktop\TL-Engine Projects\Lab5\Lab5_GravityCube_Project\Lab5_GravityCube_ProjectDebug.exe
+  Copying DLLs & shaders...

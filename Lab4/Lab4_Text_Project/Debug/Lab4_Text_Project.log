@@ -1,0 +1,8 @@
+﻿cl : command line  warning D9035: option 'Gm' has been deprecated and will be removed in a future release
+  Lab4_Text_Project.cpp
+C:\Users\e_sid\Desktop\TL-Engine Projects\Lab4\Lab4_Text_Project\Lab4_Text_Project.cpp(23,14): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\Users\e_sid\Desktop\TL-Engine Projects\Lab4\Lab4_Text_Project\Lab4_Text_Project.cpp(24,14): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\Users\e_sid\Desktop\TL-Engine Projects\Lab4\Lab4_Text_Project\Lab4_Text_Project.cpp(54,38): warning C4244: 'argument': conversion from 'float' to 'const int', possible loss of data
+C:\Users\e_sid\Desktop\TL-Engine Projects\Lab4\Lab4_Text_Project\Lab4_Text_Project.cpp(54,31): warning C4244: 'argument': conversion from 'float' to 'const int', possible loss of data
+  Lab4_Text_Project.vcxproj -> C:\Users\e_sid\Desktop\TL-Engine Projects\Lab4\Lab4_Text_Project\Lab4_Text_ProjectDebug.exe
+  Copying DLLs & shaders...

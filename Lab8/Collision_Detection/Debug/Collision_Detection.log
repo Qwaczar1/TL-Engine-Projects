@@ -1,0 +1,6 @@
+﻿cl : command line  warning D9035: option 'Gm' has been deprecated and will be removed in a future release
+  Collision_Detection.cpp
+TL-Engine2019Debug.lib(TLXEngine.obj) : warning LNK4099: PDB '' was not found with 'TL-Engine2019Debug.lib(TLXEngine.obj)' or at ''; linking object as if no debug info
+TL-Engine2019Debug.lib(IrrlichtSceneNode.obj) : warning LNK4099: PDB '' was not found with 'TL-Engine2019Debug.lib(IrrlichtSceneNode.obj)' or at ''; linking object as if no debug info
+  Collision_Detection.vcxproj -> C:\Users\e_sid\Desktop\TL-Engine Projects\Lab8\Collision_Detection\Collision_DetectionDebug.exe
+  Copying DLLs & shaders...
