@@ -12,6 +12,10 @@ struct Vector
 	float z;
 	float length;
 
+	void printVector() {
+		cout << "x = " << x << "  y = " << y << "  z = " << z << "\n";
+	}
+
 	void vectorSet(float newX, float newY, float newZ) {
 		x = newX;
 		y = newY;
@@ -89,5 +93,5 @@ struct Vector
 		model->Move(x * factor, y * factor, z * factor);
 	}
 
-	
+
 };

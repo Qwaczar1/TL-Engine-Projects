@@ -7,45 +7,6 @@
 using namespace tle;
 using namespace std;
 
-//typedef struct Vector {
-//	float x = 0;
-//	float y = 0;
-//	float z = 0;
-//	float length = 0;
-//};
-//
-//Vector SetVector(float x, float y, float z, float length = 1) {
-//	Vector vect;
-//	vect.x = x;
-//	vect.y = y;
-//	vect.z = z;
-//	vect.length = length;
-//	return vect;
-//}
-//
-//Vector Vector3Add(Vector vect1, Vector vect2) {
-//	Vector vectorSum;
-//	vectorSum.x = vect1.x + vect2.x;
-//	vectorSum.y = vect1.y + vect2.y;
-//	vectorSum.z = vect1.z + vect2.z;
-//	return vectorSum;
-//}
-//
-//Vector Vecotr3SetLength(Vector vect, float length) {
-//	Vector newVector;
-//	vect.length = sqrt((vect.x * vect.x) + (vect.y * vect.y) + (vect.z * vect.z));
-//	if (vect.length == 0) { return vect; }
-//	float lengthRatio = length / vect.length;
-//	newVector.x = vect.x * lengthRatio;
-//	newVector.y = vect.y * lengthRatio;
-//	newVector.z = vect.z * lengthRatio;
-//	return newVector;
-//}
-//
-//void VectorMove(IModel* model, Vector vect) {
-//	model->Move(vect.x, vect.y, vect.z);
-//}
-
 Vector PositionCompare(IModel* model1, IModel* model2) {
 	Vector relativeV;
 	relativeV.x = model1->GetX() - model2->GetX();
