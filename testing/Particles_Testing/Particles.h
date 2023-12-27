@@ -13,7 +13,7 @@ enum spawner_Shapes {
 struct particle {
 	Vector vector;
 	IModel* model;
-	int age;
+	int age = 0;
 };
 
 particle createParticle(Vector vect, IMesh* mesh, Vector position) {
@@ -55,46 +55,61 @@ struct particleSyst {
 		}
 	}
 
-	void updateSystem() {
-
-		if (size < maxsize)
+	void spawnParticles(int i = -1) {
+		switch (spawner_shape)
 		{
-			cout << "\nSpawning new particle \n";
-			switch (spawner_shape)
-			{
-			case cone:
-				// Param1 serves as the cone's angle.  |  Param2 serves as the cone height  |  vect serves as the pointing direction of the spawner
-				Vector particleVect = vect;
-				//particleVect.printVector();
-				particleVect.rotateOn(vect.crossProduct({ vect.y, vect.z, vect.x }), random(0, param1));
-				//particleVect.printVector();
-				particleVect.rotateOn(vect, random(0, 2 * pi));
-				//particleVect.printVector();
-				particleVect.setLength(random(minVelocity, maxVelocity));
+		case cone:
+			// Param1 serves as the cone's angle.  |  Param2 serves as the cone height  |  vect serves as the pointing direction of the spawner
+			Vector particleVect = vect;
+			particleVect.rotateOn(vect.crossProduct({ vect.y, vect.z, vect.x }), random(0, param1));
+			particleVect.rotateOn(vect, random(0, 2 * pi));
+			particleVect.setLength(random(minVelocity, maxVelocity));
+			if (i < 0) {
 				particles[size] = createParticle(particleVect, particleMesh, posVect);
 				size++;
-				//particleVect.printVector();
-				break;
-			case rectangle:
-				// Param1 serves as the square's x length.  |  Param2 serves as the square's z length  |  vect serves as the pointing direction of the spawner
-				break;
-			case sphere:
-				// Param1 serves as the sphere's Radius.  |  Param2 serves no prupos  |  vect serves as the pointing direction of the spawner
-				break;
-			case vector:
-				// Param1 serves as the cone's Radius.  |  Param2 serves as the cone height  |  vect serves as the pointing direction of the spawner
-				break;
-			default:
-				break;
 			}
-		}
-
-
-		if (maxAge) {
-
+			else {
+				particles[i].model->SetPosition(posVect.x, posVect.y, posVect.z);
+				particles[i].vector = particleVect;
+				particles[i].age = 0;
+			}
+			//particleVect.printVector();
+			break;
+		case rectangle:
+			// Param1 serves as the square's x length.  |  Param2 serves as the square's z length  |  vect serves as the pointing direction of the spawner
+			break;
+		case sphere:
+			// Param1 serves as the sphere's Radius.  |  Param2 serves no prupos  |  vect serves as the pointing direction of the spawner
+			break;
+		case vector:
+			// Param1 serves as the cone's Radius.  |  Param2 serves as the cone height  |  vect serves as the pointing direction of the spawner
+			break;
+		default:
+			break;
 		}
 	}
 
+	void respawnParticle(int i) {
+		spawnParticles(i);
+	}
+
+	void ageParticles() {
+		for (int i = 0; i < size; i++)
+		{
+			if (particles[i].age >= maxAge) {
+				respawnParticle(i);
+			}
+			particles[i].age++;
+		}
+	}
+
+	void updateSystem() {
+		if (size < maxsize) {
+			spawnParticles();
+		}
+		ageParticles();
+		moveParticles();
+	}
 };
 
 

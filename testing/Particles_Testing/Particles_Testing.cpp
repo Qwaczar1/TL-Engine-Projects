@@ -20,7 +20,7 @@ void main()
 
 	Vector systemVect = { 1, 0, 0 };
 	Vector systemPositionVect = { 0, 0, 0 };
-	particleSyst particlesTest = setupParticleSystem(particleMesh, 10, 5, 0, 0, 0.1, 0.2, systemVect, systemPositionVect, cone, 0.5, 1);
+	particleSyst particlesTest = setupParticleSystem(particleMesh, 10, 5, 500, 0, 0.1, 0.2, systemVect, systemPositionVect, cone, 0.5, 1);
 
 	srand(time(NULL));
 
@@ -32,7 +32,6 @@ void main()
 
 		/**** Update your scene each frame here ****/
 		particlesTest.updateSystem();
-		particlesTest.moveParticles();
 	}
 
 	// Delete the 3D engine now we are finished with it
