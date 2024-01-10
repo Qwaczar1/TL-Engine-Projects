@@ -7,7 +7,7 @@ using namespace std;
 using namespace tle;
 
 enum spawner_Shapes {
-	cone, rectangle, sphere, vector
+	cone, rectangle, simpleRectangle, sphere, vector
 };
 
 struct particle {
@@ -32,7 +32,7 @@ struct particleSyst {
 	IMesh* particleMesh;
 	int size = 0;
 	int maxsize = 0;
-	float spawn_interval = 0;
+	int spawn_interval = 0;
 	int maxAge = 10;
 	float spread = 0;
 	float minVelocity;
@@ -47,6 +47,9 @@ struct particleSyst {
 	particle particles[500];
 	int step = 0;
 	float pi = 3.14159265359f;
+	bool spawnedParticle = false;
+	bool validPos = false;
+	int spawnAttempt = 0;
 
 	void moveParticles() {
 		for (size_t i = 0; i < size; i++)
@@ -56,11 +59,15 @@ struct particleSyst {
 	}
 
 	void spawnParticles(int i = -1) {
+
+		Vector particleVect = vect;
+		Vector particlePos;
+
 		switch (spawner_shape)
 		{
 		case cone:
 			// Param1 serves as the cone's angle.  |  Param2 serves as the cone height  |  vect serves as the pointing direction of the spawner
-			Vector particleVect = vect;
+			
 			particleVect.rotateOn(vect.crossProduct({ vect.y, vect.z, vect.x }), random(0, param1));
 			particleVect.rotateOn(vect, random(0, 2 * pi));
 			particleVect.setLength(random(minVelocity, maxVelocity));
@@ -75,18 +82,67 @@ struct particleSyst {
 			}
 			//particleVect.printVector();
 			break;
+
 		case rectangle:
 			// Param1 serves as the square's x length.  |  Param2 serves as the square's z length  |  vect serves as the pointing direction of the spawner
 			break;
+
+		case simpleRectangle:
+			//Same as the rectangle, but the rect is locked on the XZ plane
+			// Param1 serves as the square's x length.  |  Param2 serves as the square's z length  |  vect serves as the pointing direction of the spawner
+
+			spawnAttempt = 0;
+
+			float distance;
+			
+			validPos = (spread == 0) ? true : false;
+
+			if (validPos) {
+				particlePos = { random(-2 * param1, 2 * param1), random(-2 * param2, 2 * param2), 0 };
+			}
+			
+			while (!validPos && spawnAttempt < 10)
+			{
+				validPos = true;
+				spawnAttempt++;
+				particlePos = { random(-2 * param1, 2 * param1), 0, random(-2 * param2, 2 * param2) };
+				for (int i = 0; i < size; i++)
+				{
+					distance = particlePos.findDist({ particles[i].model->GetX() ,particles[i].model->GetY() ,particles[i].model->GetZ() });
+
+					if (distance < spread) {
+						validPos = false;
+						cout << "Invalid Possition! Attempt : " << spawnAttempt << "\n";
+					}
+				}
+			}
+			cout << "Found Position! \n";
+
+			particlePos.addVector(posVect);
+			particleVect.setLength(random(minVelocity, maxVelocity));
+			if (i < 0) {
+				particles[size] = createParticle(particleVect, particleMesh, particlePos);
+				size++;
+			}
+			else {
+				particles[i].model->SetPosition(particlePos.x, particlePos.y, particlePos.z);
+				particles[i].vector = particleVect;
+				particles[i].age = 0;
+			}
+			break;
+
 		case sphere:
 			// Param1 serves as the sphere's Radius.  |  Param2 serves no prupos  |  vect serves as the pointing direction of the spawner
 			break;
+
 		case vector:
 			// Param1 serves as the cone's Radius.  |  Param2 serves as the cone height  |  vect serves as the pointing direction of the spawner
 			break;
+
 		default:
 			break;
 		}
+		spawnedParticle = true;
 	}
 
 	void respawnParticle(int i) {
@@ -104,18 +160,34 @@ struct particleSyst {
 	}
 
 	void updateSystem() {
-		if (size < maxsize) {
-			spawnParticles();
+		if (maxAge != 0) {
+			ageParticles();
 		}
-		ageParticles();
+		if (spawn_interval == 0) {
+			for (int i = 0; i < maxsize; i++){
+				if (size < maxsize && spawnedParticle == false) {
+					spawnParticles();
+				}
+				spawnedParticle = false;
+			}
+		}
+		else {
+			if (step % spawn_interval == 0) {
+				if (size < maxsize && spawnedParticle == false) {
+					spawnParticles();
+				}
+				spawnedParticle = false;
+			}
+		}
+		
 		moveParticles();
+		step++;
 	}
 };
 
 
-particleSyst setupParticleSystem(IMesh* particleMesh, int MaxSize, float SpawnInterval, int maxAge, float spread, float minVelocity, float maxVelocity, Vector vect, Vector position, spawner_Shapes SpanerShape, float Param1, float Param2) {
+particleSyst setupParticleSystem(IMesh* particleMesh, int MaxSize, int SpawnInterval, int maxAge, float spread, float minVelocity, float maxVelocity, Vector vect, Vector position, spawner_Shapes SpanerShape, float Param1, float Param2) {
 
 	return { particleMesh, 0, MaxSize, SpawnInterval, maxAge, spread, minVelocity, maxVelocity, vect, position, SpanerShape, Param1, Param2 };
 
 }
-

@@ -32,6 +32,10 @@ struct Vector
 		length = newLength;
 	}
 
+	float findDist(Vector vect) {
+		return sqrt(((x - vect.x) * (x - vect.x)) + ((y - vect.y) * (y - vect.y)) + ((z - vect.z) * (z - vect.z)));
+	}
+
 	Vector addVector(Vector vect) {
 		return { x + vect.x, y + vect.y, z + vect.z };
 	}
@@ -89,5 +93,5 @@ struct Vector
 		model->Move(x * factor, y * factor, z * factor);
 	}
 
-	
+
 };

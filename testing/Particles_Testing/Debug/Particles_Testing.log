@@ -1,25 +1,6 @@
 ﻿cl : command line  warning D9035: option 'Gm' has been deprecated and will be removed in a future release
   Particles_Testing.cpp
-C:\Users\e_sid\Desktop\TL-Engine Projects\testing\Particles_Testing\Particles.h(52,24): warning C4018: '<': signed/unsigned mismatch
+C:\Users\e_sid\Desktop\TL-Engine Projects\testing\Particles_Testing\Particles.h(55,24): warning C4018: '<': signed/unsigned mismatch
 C:\Users\e_sid\Desktop\TL-Engine Projects\testing\Particles_Testing\Particles_Testing.cpp(25,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-TL-Engine2019Debug.lib(TL-Engine.obj) : warning LNK4099: PDB '' was not found with 'TL-Engine2019Debug.lib(TL-Engine.obj)' or at ''; linking object as if no debug info
-TL-Engine2019Debug.lib(Errors.obj) : warning LNK4099: PDB '' was not found with 'TL-Engine2019Debug.lib(Errors.obj)' or at ''; linking object as if no debug info
-TL-Engine2019Debug.lib(TLXSprite.obj) : warning LNK4099: PDB '' was not found with 'TL-Engine2019Debug.lib(TLXSprite.obj)' or at ''; linking object as if no debug info
-TL-Engine2019Debug.lib(TLXSceneNode.obj) : warning LNK4099: PDB '' was not found with 'TL-Engine2019Debug.lib(TLXSceneNode.obj)' or at ''; linking object as if no debug info
-TL-Engine2019Debug.lib(TLXModelNode.obj) : warning LNK4099: PDB '' was not found with 'TL-Engine2019Debug.lib(TLXModelNode.obj)' or at ''; linking object as if no debug info
-TL-Engine2019Debug.lib(TLXModel.obj) : warning LNK4099: PDB '' was not found with 'TL-Engine2019Debug.lib(TLXModel.obj)' or at ''; linking object as if no debug info
-TL-Engine2019Debug.lib(TLXMesh.obj) : warning LNK4099: PDB '' was not found with 'TL-Engine2019Debug.lib(TLXMesh.obj)' or at ''; linking object as if no debug info
-TL-Engine2019Debug.lib(TLXLight.obj) : warning LNK4099: PDB '' was not found with 'TL-Engine2019Debug.lib(TLXLight.obj)' or at ''; linking object as if no debug info
-TL-Engine2019Debug.lib(TLXFont.obj) : warning LNK4099: PDB '' was not found with 'TL-Engine2019Debug.lib(TLXFont.obj)' or at ''; linking object as if no debug info
-TL-Engine2019Debug.lib(TLXEngine.obj) : warning LNK4099: PDB '' was not found with 'TL-Engine2019Debug.lib(TLXEngine.obj)' or at ''; linking object as if no debug info
-TL-Engine2019Debug.lib(TLXCamera.obj) : warning LNK4099: PDB '' was not found with 'TL-Engine2019Debug.lib(TLXCamera.obj)' or at ''; linking object as if no debug info
-TL-Engine2019Debug.lib(IrrlichtSceneNode.obj) : warning LNK4099: PDB '' was not found with 'TL-Engine2019Debug.lib(IrrlichtSceneNode.obj)' or at ''; linking object as if no debug info
-TL-Engine2019Debug.lib(IrrlichtModel.obj) : warning LNK4099: PDB '' was not found with 'TL-Engine2019Debug.lib(IrrlichtModel.obj)' or at ''; linking object as if no debug info
-TL-Engine2019Debug.lib(IrrlichtMesh.obj) : warning LNK4099: PDB '' was not found with 'TL-Engine2019Debug.lib(IrrlichtMesh.obj)' or at ''; linking object as if no debug info
-TL-Engine2019Debug.lib(IrrlichtLight.obj) : warning LNK4099: PDB '' was not found with 'TL-Engine2019Debug.lib(IrrlichtLight.obj)' or at ''; linking object as if no debug info
-TL-Engine2019Debug.lib(IrrlichtInput.obj) : warning LNK4099: PDB '' was not found with 'TL-Engine2019Debug.lib(IrrlichtInput.obj)' or at ''; linking object as if no debug info
-TL-Engine2019Debug.lib(IrrlichtFont.obj) : warning LNK4099: PDB '' was not found with 'TL-Engine2019Debug.lib(IrrlichtFont.obj)' or at ''; linking object as if no debug info
-TL-Engine2019Debug.lib(IrrlichtEngine.obj) : warning LNK4099: PDB '' was not found with 'TL-Engine2019Debug.lib(IrrlichtEngine.obj)' or at ''; linking object as if no debug info
-TL-Engine2019Debug.lib(IrrlichtCamera.obj) : warning LNK4099: PDB '' was not found with 'TL-Engine2019Debug.lib(IrrlichtCamera.obj)' or at ''; linking object as if no debug info
   Particles_Testing.vcxproj -> C:\Users\e_sid\Desktop\TL-Engine Projects\testing\Particles_Testing\Particles_TestingDebug.exe
   Copying DLLs & shaders...

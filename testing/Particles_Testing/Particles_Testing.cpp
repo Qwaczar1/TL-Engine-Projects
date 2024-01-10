@@ -20,9 +20,13 @@ void main()
 
 	Vector systemVect = { 1, 0, 0 };
 	Vector systemPositionVect = { 0, 0, 0 };
-	particleSyst particlesTest = setupParticleSystem(particleMesh, 10, 5, 500, 0, 0.1, 0.2, systemVect, systemPositionVect, cone, 0.5, 1);
+	particleSyst particlesTest = setupParticleSystem(particleMesh, 20, 0, 0, 10, 0, 0, systemVect, systemPositionVect, simpleRectangle, 20, 20);
 
 	srand(time(NULL));
+
+	stringstream outText;
+	IFont* myFont = myEngine->LoadFont("Comic Sans", 36);
+
 
 	// The main game loop, repeat until engine is stopped
 	while (myEngine->IsRunning())
@@ -32,6 +36,11 @@ void main()
 
 		/**** Update your scene each frame here ****/
 		particlesTest.updateSystem();
+
+
+		outText << "Particles: " << particlesTest.size;
+		myFont->Draw(outText.str(), myEngine->GetWidth() - 200, 20);
+		outText.str("");
 	}
 
 	// Delete the 3D engine now we are finished with it
