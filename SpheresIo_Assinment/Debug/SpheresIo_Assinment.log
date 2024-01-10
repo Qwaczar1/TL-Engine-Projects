@@ -1,8 +1,9 @@
 ﻿cl : command line  warning D9035: option 'Gm' has been deprecated and will be removed in a future release
   SpheresIo_Assinment.cpp
-C:\Users\e_sid\Desktop\TL-Engine Projects\SpheresIo_Assinment\SpheresIo_Assinment.cpp(41,2): warning C4091: 'typedef ': ignored on left of 'Food' when no variable is declared
-C:\Users\e_sid\Desktop\TL-Engine Projects\SpheresIo_Assinment\SpheresIo_Assinment.cpp(48,2): warning C4091: 'typedef ': ignored on left of 'Player' when no variable is declared
-C:\Users\e_sid\Desktop\TL-Engine Projects\SpheresIo_Assinment\SpheresIo_Assinment.cpp(57,2): warning C4091: 'typedef ': ignored on left of 'CamTransform' when no variable is declared
-C:\Users\e_sid\Desktop\TL-Engine Projects\SpheresIo_Assinment\SpheresIo_Assinment.cpp(79,37): warning C4244: 'return': conversion from 'int' to 'float', possible loss of data
+C:\Users\e_sid\Desktop\TL-Engine Projects\SpheresIo_Assinment\Particles.h(56,24): warning C4018: '<': signed/unsigned mismatch
+C:\Users\e_sid\Desktop\TL-Engine Projects\SpheresIo_Assinment\SpheresIo_Assinment.cpp(42,2): warning C4091: 'typedef ': ignored on left of 'Player' when no variable is declared
+C:\Users\e_sid\Desktop\TL-Engine Projects\SpheresIo_Assinment\SpheresIo_Assinment.cpp(51,2): warning C4091: 'typedef ': ignored on left of 'CamTransform' when no variable is declared
+C:\Users\e_sid\Desktop\TL-Engine Projects\SpheresIo_Assinment\SpheresIo_Assinment.cpp(73,37): warning C4244: 'return': conversion from 'int' to 'float', possible loss of data
+C:\Users\e_sid\Desktop\TL-Engine Projects\SpheresIo_Assinment\SpheresIo_Assinment.cpp(115,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
   SpheresIo_Assinment.vcxproj -> C:\Users\e_sid\Desktop\TL-Engine Projects\SpheresIo_Assinment\SpheresIo_AssinmentDebug.exe
   Copying DLLs & shaders...

@@ -1,7 +1,6 @@
 #pragma once
 #include <TL-Engine.h>
 #include <iostream>
-#include <sstream>
 using namespace std;
 using namespace tle;
 
@@ -25,7 +24,7 @@ struct Vector
 	}
 
 	void setLength(float newLength) {
-		
+
 		length = sqrt((x * x) + (y * y) + (z * z));
 		x *= newLength / length;
 		y *= newLength / length;
@@ -33,10 +32,36 @@ struct Vector
 		length = newLength;
 	}
 
-	void addVector(Vector vect) {
-		x += vect.x;
-		y += vect.y;
-		z += vect.z;
+	float findDist(Vector vect) {
+		return sqrt(((x - vect.x) * (x - vect.x)) + ((y - vect.y) * (y - vect.y)) + ((z - vect.z) * (z - vect.z)));
+	}
+
+	Vector addVector(Vector vect) {
+		return { x + vect.x, y + vect.y, z + vect.z };
+	}
+
+	Vector multiplyVector(float a) {
+		return { x * a, y * a, z * a };
+	}
+
+	Vector normalize() {
+		getLength();
+		Vector normalized{ x / length, y / length, z / length, 1 };
+		//cout << "Normalized Vector x : " << normalized.x << "  y : " << normalized.y << "  z : " << normalized.z;
+		return normalized;
+	}
+
+	float dotProduct(Vector w) {
+		return (x * w.x + y * w.y + z * w.z);
+	}
+
+	Vector crossProduct(Vector w) {
+		//Vector newVector{ y * w.z - z * w.y, z * w.x - x * w.z, x * w.y - y * w.x, 1 };
+		return { y * w.z - z * w.y, z * w.x - x * w.z, x * w.y - y * w.x, 1 };
+	}
+
+	float angleDiffrence(Vector w) {
+		return acos(dotProduct(w));
 	}
 
 	void rotateX(float angle) {
@@ -58,32 +83,15 @@ struct Vector
 	}
 
 	void rotateOn(Vector axis, float angle) {
-
+		Vector newVect = addVector(axis.multiplyVector(1 - cos(angle)).crossProduct(crossProduct(axis))).addVector(crossProduct(axis.multiplyVector(sin(angle))));
+		x = newVect.x;
+		y = newVect.y;
+		z = newVect.z;
 	}
 
 	void move(IModel* model, float factor = 1) {
 		model->Move(x * factor, y * factor, z * factor);
 	}
 
-	Vector normalize() {
-		getLength();
-		Vector normalized;
-		normalized.x = x / length;
-		normalized.y = y / length;
-		normalized.z = z / length;
-		return normalized;
-	}
 
-	float dotProduct(Vector w) {
-		return (x * w.x + y * w.y + z * w.z);
-	}
-
-	Vector crossProduct(Vector w) {
-		//Vector newVector{ y * w.z - z * w.y, z * w.x - x * w.z, x * w.y - y * w.x, 1 };
-		return { y * w.z - z * w.y, z * w.x - x * w.z, x * w.y - y * w.x, 1 };
-	}
-
-	float angleDiffrence(Vector w) {
-		return acos(dotProduct(w));
-	}
 };

@@ -4,6 +4,7 @@
 #include <iostream>
 #include <sstream>
 #include "Vectors.h"
+#include "Particles.h"
 using namespace tle;
 using namespace std;
 
@@ -27,24 +28,17 @@ enum States{
 	Pause, Playing, GameOver, GameWon
 };
 
-enum FoodType {
-	BasicFood, HyperFood
-};
-
-typedef struct Food {
-	IModel* model;
-	Vector vect3;
-	float scale;
-	FoodType type;
-
-
+enum PlayerStates {
+	Regular, Hyper
 };
 
 typedef struct Player {
 	IModel* model;
 	Vector vect3;
-	MovementStates state;
+	MovementStates Mstate;
+	PlayerStates Pstate = Regular;
 	float radius = 5.0f;
+	float hyperTimer = 0.0;
 };
 
 typedef struct CamTransform {
@@ -117,6 +111,8 @@ void main()
 	// Declaring Constants
 	float pi = 3.14159265359f;
 
+	// Setting Rand Seed
+	srand(time(NULL));
 
 	// Loading Meshs
 	IMesh* islandMesh = myEngine->LoadMesh("island.x");
@@ -146,19 +142,39 @@ void main()
 	CamSetTransform(myCamera, camView1, camview0);
 	camview0 = camView1;
 
-	// food spawn
-	const int MAX_FOOD = 12;
-	IModel* food[MAX_FOOD];
-	for (int i = 0; i < MAX_FOOD; i++){
-		food[i] = miniCubeMesh->CreateModel(random(-100, 100), 2, random(-100, 100));
-	}
-
 	// Player Setup
 	Player player;
 	player.model = sphereMesh->CreateModel(0, 10, 0);
 	player.vect3.vectorSet(0, 0, 1);
-	player.state = Paused;
+	player.Mstate = Paused;
 	player.radius = 10;
+
+	// Enemy Setup
+	/*Player enemy;
+	enemy.model = sphereMesh->CreateModel()
+	*/
+
+	// food spawn
+	Vector systemVect = { 1, 0, 0 };
+	Vector systemPositionVect = { 0, 4, 0 };
+	particleSyst foodSystem = setupParticleSystem(miniCubeMesh, 12, 0, 0, 10, 0, 0, systemVect, systemPositionVect, simpleRectangle, 48, 48);
+
+	//creating 1 special food
+	foodSystem.updateSystem();
+	for (int i = 0; i < foodSystem.size; i++)
+	{
+		if (SphereRectCollision(player.model, player.radius, foodSystem.particles[i].model, 4)) {
+			for (bool validFood = false; !validFood;) {
+				foodSystem.respawnParticle(i);
+				if (!SphereRectCollision(player.model, player.radius, foodSystem.particles[i].model, 4)) {
+					validFood = true;
+				}
+			}
+		}
+	}
+	foodSystem.particles[0].type = 1;
+	foodSystem.particles[0].model->SetSkin("hypercube.jpg");
+
 
 	float kDegRotationSpeed = 250;
 	float kRadRotationSpeed = kDegRotationSpeed * (pi / 180);
@@ -173,6 +189,7 @@ void main()
 	States gameState = Playing;
 
 	float deltaTime = myEngine->Timer();
+
 
 
 	// The main game loop, repeat until engine is stopped
@@ -214,12 +231,12 @@ void main()
 		case Playing:
 
 			// Movment Player Input
-			player.state = Paused;
+			player.Mstate = Paused;
 			if (myEngine->KeyHeld(Key_W)) {
-				player.state = MovingFront;
+				player.Mstate = MovingFront;
 			}
 			if (myEngine->KeyHeld(Key_S)) {
-				player.state = MovingBack;
+				player.Mstate = MovingBack;
 			}
 			if (myEngine->KeyHeld(Key_A)) {
 				player.model->RotateY(-kDegRotationSpeed * deltaTime);
@@ -230,8 +247,8 @@ void main()
 				player.vect3.rotateY(kRadRotationSpeed * deltaTime);
 			}
 
-			// Moving Player
-			switch (player.state) {
+			// Player Movement States
+			switch (player.Mstate) {
 			case MovingFront:
 				player.vect3.setLength(kSphereSpeed * deltaTime);
 				player.vect3.move(player.model);
@@ -245,10 +262,56 @@ void main()
 				break;
 			}
 
+			// Player States
+			switch (player.Pstate) {
+			case Regular:
+				break;
+
+			case Hyper:
+				for (int i = 0; i < foodSystem.size; i++)
+				{
+					foodSystem.particles[i].vector = {
+						foodSystem.particles[i].model->GetX() - player.model->GetX(),
+						foodSystem.particles[i].model->GetY() - player.model->GetY(),
+						foodSystem.particles[i].model->GetZ() - player.model->GetZ() };
+					foodSystem.particles[i].vector.getLength();
+					if (foodSystem.particles[i].vector.length > 50) {
+						foodSystem.particles[i].vector = { 0,0,0 };
+					}
+					else {
+						foodSystem.particles[i].vector.setLength(-0.01);
+					}
+
+				}
+				player.hyperTimer -= deltaTime;
+				if (player.hyperTimer < 0) {
+					player.Pstate = Regular;
+					for (int i = 0; i < foodSystem.size; i++) {
+						foodSystem.particles[i].vector = { 0,0,0 };
+					}
+				}
+				break;
+
+			default:
+				break;
+			}
+
+			// Food Systems
+			foodSystem.updateSystem();
+
 			// Food Collision
-			for (int i = 0; i < MAX_FOOD; i++) {
-				if (SphereRectCollision(player.model, player.radius, food[i], 2)) {
-					food[i]->SetPosition(random(-100, 100), 2, random(-100, 100));
+			for (int i = 0; i < foodSystem.size; i++) {
+				if (SphereRectCollision(player.model, player.radius, foodSystem.particles[i].model, 4)) {
+					for (bool validFood = false; !validFood;) {
+						foodSystem.respawnParticle(i);
+						if (!SphereRectCollision(player.model, player.radius, foodSystem.particles[i].model, 4)) {
+							validFood = true;
+						}
+					}
+					if (foodSystem.particles[i].type == 1) {
+						player.Pstate = Hyper;
+						player.hyperTimer = 5;
+					}
 					score += 10;
 					if (score % 40 == 0) {
 						player.model->Scale(1.2);
