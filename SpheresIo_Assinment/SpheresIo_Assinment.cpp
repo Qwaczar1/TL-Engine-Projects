@@ -35,10 +35,35 @@ enum PlayerStates {
 typedef struct Player {
 	IModel* model;
 	Vector vect3;
+	Vector posVect;
 	MovementStates Mstate;
 	PlayerStates Pstate = Regular;
 	float radius = 5.0f;
 	float hyperTimer = 0.0;
+
+	void findPosVect() {
+		posVect = { model->GetX(), model->GetY(), model->GetZ() };
+	}
+
+	void movementLogic(float speed) {
+		switch (Mstate) {
+		case MovingFront:
+			vect3.setLength(speed);
+			vect3.move(model);
+			break;
+		case MovingBack:
+			vect3.setLength(speed);
+			vect3.move(model, -1);
+			break;
+		case Paused: break;
+		default:
+			break;
+		}
+	}
+
+	void statesLogic(particleSyst foodSystem, float deltaTime){
+
+	}
 };
 
 typedef struct CamTransform {
@@ -150,9 +175,13 @@ void main()
 	player.radius = 10;
 
 	// Enemy Setup
-	/*Player enemy;
-	enemy.model = sphereMesh->CreateModel()
-	*/
+	Player enemy;
+	enemy.model = sphereMesh->CreateModel(80, 10, 80);
+	enemy.model->SetSkin("enemysphere.jpg");
+	enemy.vect3.vectorSet(0, 0, 1);
+	enemy.Mstate = Paused;
+	enemy.radius = 10;	
+	Vector closestFood = { 0, 0, 0 };
 
 	// food spawn
 	Vector systemVect = { 1, 0, 0 };
@@ -163,10 +192,10 @@ void main()
 	foodSystem.updateSystem();
 	for (int i = 0; i < foodSystem.size; i++)
 	{
-		if (SphereRectCollision(player.model, player.radius, foodSystem.particles[i].model, 4)) {
+		if (SphereRectCollision(player.model, player.radius, foodSystem.particles[i].model, 4) && !SphereRectCollision(enemy.model, enemy.radius, foodSystem.particles[i].model, 4)) {
 			for (bool validFood = false; !validFood;) {
 				foodSystem.respawnParticle(i);
-				if (!SphereRectCollision(player.model, player.radius, foodSystem.particles[i].model, 4)) {
+				if (!SphereRectCollision(player.model, player.radius, foodSystem.particles[i].model, 4) && !SphereRectCollision(enemy.model, enemy.radius, foodSystem.particles[i].model, 4)) {
 					validFood = true;
 				}
 			}
@@ -181,10 +210,12 @@ void main()
 	float kSphereSpeed = 50;
 
 	int score = 0;
+	int enemyScore = 0;
 
-	stringstream outText;
-	IFont* myFont = myEngine->LoadFont("Comic Sans", 36);
-	IFont* largeFont = myEngine->LoadFont("Comic Sans", 72);
+	stringstream playerScoreDisplay;
+	stringstream enemyScoreDisplay;
+	IFont* scoreFont = myEngine->LoadFont("Comic Sans", 36);
+	IFont* anouncementFont = myEngine->LoadFont("Comic Sans", 72);
 
 	States gameState = Playing;
 
@@ -210,7 +241,7 @@ void main()
 			myEngine->Stop();
 		}
 		if (gameState == Paused) {
-			largeFont->Draw("GAME PAUSED", myEngine->GetWidth() / 2, myEngine->GetHeight() / 2, kRed, kCentre, kVCentre);
+			anouncementFont->Draw("GAME PAUSED", myEngine->GetWidth() / 2, myEngine->GetHeight() / 2, kRed, kCentre, kVCentre);
 		}
 		
 		if (player.model->GetX() > 100 || player.model->GetX() < -100 || player.model->GetZ() > 100 || player.model->GetZ() < -100) {
@@ -227,7 +258,7 @@ void main()
 		case Paused:
 			break;
 
-		// Playing State
+		// Game State
 		case Playing:
 
 			// Movment Player Input
@@ -248,21 +279,10 @@ void main()
 			}
 
 			// Player Movement States
-			switch (player.Mstate) {
-			case MovingFront:
-				player.vect3.setLength(kSphereSpeed * deltaTime);
-				player.vect3.move(player.model);
-				break;
-			case MovingBack:
-				player.vect3.setLength(kSphereSpeed * deltaTime);
-				player.vect3.move(player.model, -1);
-				break;
-			case Paused: break;
-			default:
-				break;
-			}
+			player.movementLogic(kSphereSpeed * deltaTime * 10 / player.radius);
 
 			// Player States
+
 			switch (player.Pstate) {
 			case Regular:
 				break;
@@ -296,15 +316,84 @@ void main()
 				break;
 			}
 
+			// Enemy AI
+			// Finding Closest Food
+			enemy.findPosVect();
+			closestFood = { foodSystem.particles[0].model->GetX() - enemy.model->GetX(), 0, foodSystem.particles[0].model->GetZ() - enemy.model->GetZ() };
+			
+			for (int i = 0; i < foodSystem.size; i++)
+			{
+				closestFood.getLength();
+				if (closestFood.length > enemy.posVect.findDist({ foodSystem.particles[i].model->GetX(), 0, foodSystem.particles[i].model->GetZ() })) {
+					closestFood = { foodSystem.particles[i].model->GetX() - enemy.model->GetX(), 0, foodSystem.particles[i].model->GetZ() - enemy.model->GetZ() };
+				}
+			}
+			// Moving towards closest food
+			enemy.Mstate = Paused;
+			if (enemy.vect3.normalize().dotProduct(closestFood.normalize()) > 0.999) {
+				enemy.Mstate = MovingFront;
+				//cout << "facing food. dot product = " << enemy.vect3.normalize().dotProduct(closestFood.normalize()) << "\n";
+			}
+			else {
+				if (enemy.vect3.crossProduct({0,1,0}).dotProduct(closestFood) > 0) {
+					//cout << " turning Left\n";
+					enemy.vect3.rotateY(-kRadRotationSpeed * deltaTime);
+					enemy.model->RotateY(-kDegRotationSpeed * deltaTime);
+				}
+				else {
+					//cout << " turning Right\n";
+					enemy.vect3.rotateY(kRadRotationSpeed * deltaTime);
+					enemy.model->RotateY(kDegRotationSpeed * deltaTime);
+				}
+
+			}
+			
+			enemy.movementLogic(kSphereSpeed * deltaTime * 10 / enemy.radius);
+
+			// Enemy States
+
+			switch (enemy.Pstate) {
+			case Regular:
+				break;
+
+			case Hyper:
+				for (int i = 0; i < foodSystem.size; i++)
+				{
+					foodSystem.particles[i].vector = {
+						foodSystem.particles[i].model->GetX() - enemy.model->GetX(),
+						foodSystem.particles[i].model->GetY() - enemy.model->GetY(),
+						foodSystem.particles[i].model->GetZ() - enemy.model->GetZ() };
+					foodSystem.particles[i].vector.getLength();
+					if (foodSystem.particles[i].vector.length > 50) {
+						foodSystem.particles[i].vector = { 0,0,0 };
+					}
+					else {
+						foodSystem.particles[i].vector.setLength(-0.01);
+					}
+
+				}
+				enemy.hyperTimer -= deltaTime;
+				if (enemy.hyperTimer < 0) {
+					enemy.Pstate = Regular;
+					for (int i = 0; i < foodSystem.size; i++) {
+						foodSystem.particles[i].vector = { 0,0,0 };
+					}
+				}
+				break;
+
+			default:
+				break;
+			}
 			// Food Systems
 			foodSystem.updateSystem();
 
 			// Food Collision
+			// Player
 			for (int i = 0; i < foodSystem.size; i++) {
 				if (SphereRectCollision(player.model, player.radius, foodSystem.particles[i].model, 4)) {
 					for (bool validFood = false; !validFood;) {
 						foodSystem.respawnParticle(i);
-						if (!SphereRectCollision(player.model, player.radius, foodSystem.particles[i].model, 4)) {
+						if (!SphereRectCollision(player.model, player.radius, foodSystem.particles[i].model, 4) && !SphereRectCollision(enemy.model, enemy.radius, foodSystem.particles[i].model, 4)) {
 							validFood = true;
 						}
 					}
@@ -316,23 +405,57 @@ void main()
 					if (score % 40 == 0) {
 						player.model->Scale(1.2);
 						player.radius *= 1.2;
-						kSphereSpeed *= 0.8;
 					}
 				}
+			}
+			// Enemy
+			for (int i = 0; i < foodSystem.size; i++) {
+				if (SphereRectCollision(enemy.model, enemy.radius, foodSystem.particles[i].model, 4)) {
+					for (bool validFood = false; !validFood;) {
+						foodSystem.respawnParticle(i);
+						if (!SphereRectCollision(player.model, player.radius, foodSystem.particles[i].model, 4) && !SphereRectCollision(enemy.model, enemy.radius, foodSystem.particles[i].model, 4)) {
+							validFood = true;
+						}
+					}
+					if (foodSystem.particles[i].type == 1) {
+						enemy.Pstate = Hyper;
+						enemy.hyperTimer = 5;
+					}
+					enemyScore += 10;
+					if (enemyScore % 40 == 0) {
+						enemy.model->Scale(1.2);
+						enemy.radius *= 1.2;
+					}
+				}
+			}
+
+			// Player ~ Enemy colision
+			player.findPosVect();
+			enemy.findPosVect();
+			cout << "distance = " << player.posVect.findDist(enemy.posVect) << "   range = " << player.radius + enemy.radius << "\n";
+			if (player.posVect.findDist(enemy.posVect) < player.radius + enemy.radius) {
+				cout << "ding! \n";
+
+
+
+				/*player.model->Move((enemy.posVect.x - player.posVect.x - (player.radius + enemy.radius)) / 50, 0, (enemy.posVect.z - player.posVect.z - (player.radius + enemy.radius)) / 50);
+
+				enemy.model->Move(-(enemy.posVect.x - player.posVect.x - (player.radius + enemy.radius)) / 50, 0, -(enemy.posVect.z - player.posVect.z - (player.radius + enemy.radius)) / 50);*/
+
 			}
 
 			break;
 
 		// Game Over State
 		case GameOver:
-			largeFont->Draw("You lost :( better luck next time", myEngine->GetWidth() / 2, myEngine->GetHeight() / 2, kRed, kCentre, kVCentre);
-			largeFont->Draw("press esc to exit", myEngine->GetWidth() / 2, myEngine->GetHeight() / 2 + 70, kRed, kCentre, kVCentre);
+			anouncementFont->Draw("You lost :( better luck next time", myEngine->GetWidth() / 2, myEngine->GetHeight() / 2, kRed, kCentre, kVCentre);
+			anouncementFont->Draw("press esc to exit", myEngine->GetWidth() / 2, myEngine->GetHeight() / 2 + 70, kRed, kCentre, kVCentre);
 			break;
 
 		//Game Won State
 		case GameWon:
-			largeFont->Draw("Congratz! You Win!", myEngine->GetWidth() / 2, myEngine->GetHeight() / 2, kRed, kCentre, kVCentre);
-			largeFont->Draw("press esc to exit", myEngine->GetWidth() / 2, myEngine->GetHeight() / 2 + 70, kRed, kCentre, kVCentre);
+			anouncementFont->Draw("Congratz! You Win!", myEngine->GetWidth() / 2, myEngine->GetHeight() / 2, kRed, kCentre, kVCentre);
+			anouncementFont->Draw("press esc to exit", myEngine->GetWidth() / 2, myEngine->GetHeight() / 2 + 70, kRed, kCentre, kVCentre);
 			break;
 
 		default:
@@ -350,9 +473,13 @@ void main()
 		}
 
 		// Score Display
-		outText << "Score: " << score;
-		myFont->Draw(outText.str(), myEngine->GetWidth() - 200, 20);
-		outText.str("");
+		playerScoreDisplay << "Player Score: " << score;
+		scoreFont->Draw(playerScoreDisplay.str(), myEngine->GetWidth() - 260, 20);
+		playerScoreDisplay.str("");
+
+		enemyScoreDisplay << "Enemy Score: " << enemyScore;
+		scoreFont->Draw(enemyScoreDisplay.str(), myEngine->GetWidth() - 260, 50);
+		enemyScoreDisplay.str("");
 	}
 
 	// Delete the 3D engine now we are finished with it

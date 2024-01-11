@@ -32,6 +32,10 @@ struct Vector
 		length = newLength;
 	}
 
+	void print() {
+		cout << "x = " << x << "  y = " << y << "  z = " << z << "\n";
+	}
+
 	float findDist(Vector vect) {
 		return sqrt(((x - vect.x) * (x - vect.x)) + ((y - vect.y) * (y - vect.y)) + ((z - vect.z) * (z - vect.z)));
 	}
