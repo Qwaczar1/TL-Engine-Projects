@@ -44,6 +44,10 @@ struct Vector
 		return { x + vect.x, y + vect.y, z + vect.z };
 	}
 
+	Vector findDifrence(Vector vect) {
+		return { x - vect.x, y - vect.y, z - vect.z };
+	}
+
 	Vector multiplyVector(float a) {
 		return { x * a, y * a, z * a };
 	}

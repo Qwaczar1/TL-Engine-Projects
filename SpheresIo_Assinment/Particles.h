@@ -113,11 +113,11 @@ struct particleSyst {
 
 					if (distance < spread) {
 						validPos = false;
-						cout << "Invalid Possition! Attempt : " << spawnAttempt << "\n";
+						//cout << "Invalid Possition! Attempt : " << spawnAttempt << "\n";
 					}
 				}
 			}
-			cout << "Found Position! \n";
+			//cout << "Found Position! \n";
 
 			particlePos = particlePos.addVector(posVect);
 			particleVect.setLength(random(minVelocity, maxVelocity));
