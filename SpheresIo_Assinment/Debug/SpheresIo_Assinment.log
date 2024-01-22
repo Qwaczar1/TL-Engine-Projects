@@ -1,13 +1,32 @@
 ﻿cl : command line  warning D9035: option 'Gm' has been deprecated and will be removed in a future release
   SpheresIo_Assinment.cpp
 C:\Users\e_sid\Desktop\TL-Engine Projects\SpheresIo_Assinment\Particles.h(56,24): warning C4018: '<': signed/unsigned mismatch
-C:\Users\e_sid\Desktop\TL-Engine Projects\SpheresIo_Assinment\SpheresIo_Assinment.cpp(72,2): warning C4091: 'typedef ': ignored on left of 'Player' when no variable is declared
-C:\Users\e_sid\Desktop\TL-Engine Projects\SpheresIo_Assinment\SpheresIo_Assinment.cpp(81,2): warning C4091: 'typedef ': ignored on left of 'CamTransform' when no variable is declared
-C:\Users\e_sid\Desktop\TL-Engine Projects\SpheresIo_Assinment\SpheresIo_Assinment.cpp(103,37): warning C4244: 'return': conversion from 'int' to 'float', possible loss of data
-C:\Users\e_sid\Desktop\TL-Engine Projects\SpheresIo_Assinment\SpheresIo_Assinment.cpp(145,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-C:\Users\e_sid\Desktop\TL-Engine Projects\SpheresIo_Assinment\SpheresIo_Assinment.cpp(397,29): warning C4244: 'argument': conversion from 'double' to 'const float', possible loss of data
-C:\Users\e_sid\Desktop\TL-Engine Projects\SpheresIo_Assinment\SpheresIo_Assinment.cpp(398,26): warning C4244: '*=': conversion from 'double' to 'float', possible loss of data
-C:\Users\e_sid\Desktop\TL-Engine Projects\SpheresIo_Assinment\SpheresIo_Assinment.cpp(417,28): warning C4244: 'argument': conversion from 'double' to 'const float', possible loss of data
-C:\Users\e_sid\Desktop\TL-Engine Projects\SpheresIo_Assinment\SpheresIo_Assinment.cpp(418,25): warning C4244: '*=': conversion from 'double' to 'float', possible loss of data
+C:\Users\e_sid\Desktop\TL-Engine Projects\SpheresIo_Assinment\SpheresIo_Assinment.cpp(79,2): warning C4091: 'typedef ': ignored on left of 'Player' when no variable is declared
+C:\Users\e_sid\Desktop\TL-Engine Projects\SpheresIo_Assinment\SpheresIo_Assinment.cpp(88,2): warning C4091: 'typedef ': ignored on left of 'CamTransform' when no variable is declared
+C:\Users\e_sid\Desktop\TL-Engine Projects\SpheresIo_Assinment\SpheresIo_Assinment.cpp(110,37): warning C4244: 'return': conversion from 'int' to 'float', possible loss of data
+C:\Users\e_sid\Desktop\TL-Engine Projects\SpheresIo_Assinment\SpheresIo_Assinment.cpp(152,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+C:\Users\e_sid\Desktop\TL-Engine Projects\SpheresIo_Assinment\SpheresIo_Assinment.cpp(404,29): warning C4244: 'argument': conversion from 'double' to 'const float', possible loss of data
+C:\Users\e_sid\Desktop\TL-Engine Projects\SpheresIo_Assinment\SpheresIo_Assinment.cpp(405,26): warning C4244: '*=': conversion from 'double' to 'float', possible loss of data
+C:\Users\e_sid\Desktop\TL-Engine Projects\SpheresIo_Assinment\SpheresIo_Assinment.cpp(424,28): warning C4244: 'argument': conversion from 'double' to 'const float', possible loss of data
+C:\Users\e_sid\Desktop\TL-Engine Projects\SpheresIo_Assinment\SpheresIo_Assinment.cpp(425,25): warning C4244: '*=': conversion from 'double' to 'float', possible loss of data
+TL-Engine2019Debug.lib(TL-Engine.obj) : warning LNK4099: PDB '' was not found with 'TL-Engine2019Debug.lib(TL-Engine.obj)' or at ''; linking object as if no debug info
+TL-Engine2019Debug.lib(Errors.obj) : warning LNK4099: PDB '' was not found with 'TL-Engine2019Debug.lib(Errors.obj)' or at ''; linking object as if no debug info
+TL-Engine2019Debug.lib(TLXSprite.obj) : warning LNK4099: PDB '' was not found with 'TL-Engine2019Debug.lib(TLXSprite.obj)' or at ''; linking object as if no debug info
+TL-Engine2019Debug.lib(TLXSceneNode.obj) : warning LNK4099: PDB '' was not found with 'TL-Engine2019Debug.lib(TLXSceneNode.obj)' or at ''; linking object as if no debug info
+TL-Engine2019Debug.lib(TLXModelNode.obj) : warning LNK4099: PDB '' was not found with 'TL-Engine2019Debug.lib(TLXModelNode.obj)' or at ''; linking object as if no debug info
+TL-Engine2019Debug.lib(TLXModel.obj) : warning LNK4099: PDB '' was not found with 'TL-Engine2019Debug.lib(TLXModel.obj)' or at ''; linking object as if no debug info
+TL-Engine2019Debug.lib(TLXMesh.obj) : warning LNK4099: PDB '' was not found with 'TL-Engine2019Debug.lib(TLXMesh.obj)' or at ''; linking object as if no debug info
+TL-Engine2019Debug.lib(TLXLight.obj) : warning LNK4099: PDB '' was not found with 'TL-Engine2019Debug.lib(TLXLight.obj)' or at ''; linking object as if no debug info
+TL-Engine2019Debug.lib(TLXFont.obj) : warning LNK4099: PDB '' was not found with 'TL-Engine2019Debug.lib(TLXFont.obj)' or at ''; linking object as if no debug info
+TL-Engine2019Debug.lib(TLXEngine.obj) : warning LNK4099: PDB '' was not found with 'TL-Engine2019Debug.lib(TLXEngine.obj)' or at ''; linking object as if no debug info
+TL-Engine2019Debug.lib(TLXCamera.obj) : warning LNK4099: PDB '' was not found with 'TL-Engine2019Debug.lib(TLXCamera.obj)' or at ''; linking object as if no debug info
+TL-Engine2019Debug.lib(IrrlichtSceneNode.obj) : warning LNK4099: PDB '' was not found with 'TL-Engine2019Debug.lib(IrrlichtSceneNode.obj)' or at ''; linking object as if no debug info
+TL-Engine2019Debug.lib(IrrlichtModel.obj) : warning LNK4099: PDB '' was not found with 'TL-Engine2019Debug.lib(IrrlichtModel.obj)' or at ''; linking object as if no debug info
+TL-Engine2019Debug.lib(IrrlichtMesh.obj) : warning LNK4099: PDB '' was not found with 'TL-Engine2019Debug.lib(IrrlichtMesh.obj)' or at ''; linking object as if no debug info
+TL-Engine2019Debug.lib(IrrlichtLight.obj) : warning LNK4099: PDB '' was not found with 'TL-Engine2019Debug.lib(IrrlichtLight.obj)' or at ''; linking object as if no debug info
+TL-Engine2019Debug.lib(IrrlichtInput.obj) : warning LNK4099: PDB '' was not found with 'TL-Engine2019Debug.lib(IrrlichtInput.obj)' or at ''; linking object as if no debug info
+TL-Engine2019Debug.lib(IrrlichtFont.obj) : warning LNK4099: PDB '' was not found with 'TL-Engine2019Debug.lib(IrrlichtFont.obj)' or at ''; linking object as if no debug info
+TL-Engine2019Debug.lib(IrrlichtEngine.obj) : warning LNK4099: PDB '' was not found with 'TL-Engine2019Debug.lib(IrrlichtEngine.obj)' or at ''; linking object as if no debug info
+TL-Engine2019Debug.lib(IrrlichtCamera.obj) : warning LNK4099: PDB '' was not found with 'TL-Engine2019Debug.lib(IrrlichtCamera.obj)' or at ''; linking object as if no debug info
   SpheresIo_Assinment.vcxproj -> C:\Users\e_sid\Desktop\TL-Engine Projects\SpheresIo_Assinment\SpheresIo_AssinmentDebug.exe
   Copying DLLs & shaders...

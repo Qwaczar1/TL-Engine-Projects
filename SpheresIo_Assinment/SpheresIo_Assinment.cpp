@@ -1,4 +1,11 @@
 // SpheresIo_Assinment.cpp: A program using the TL-Engine
+/*
+Developed by Naya Zhukova (petr zhukov)
+G number : 21054529
+
+This program is the First assignment for moduel : CO1301
+Of the Course : BSc Computing
+*/
 
 #include <TL-Engine.h>	// TL-Engine include file and namespace
 #include <iostream>

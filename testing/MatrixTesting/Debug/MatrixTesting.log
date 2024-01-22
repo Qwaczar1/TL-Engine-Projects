@@ -1,0 +1,5 @@
+﻿cl : command line  warning D9035: option 'Gm' has been deprecated and will be removed in a future release
+  MatrixTesting.cpp
+C:\Users\e_sid\Desktop\TL-Engine Projects\testing\MatrixTesting\MatrixTesting.cpp(4,10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+  MatrixTesting.vcxproj -> C:\Users\e_sid\Desktop\TL-Engine Projects\testing\MatrixTesting\MatrixTestingDebug.exe
+  Copying DLLs & shaders...

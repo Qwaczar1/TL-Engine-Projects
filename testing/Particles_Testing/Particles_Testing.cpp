@@ -18,9 +18,18 @@ void main()
 	ICamera* myCamera = myEngine->CreateCamera(kFPS);
 	IMesh* particleMesh = myEngine->LoadMesh("Box.x");
 
-	Vector systemVect = { 1, 0, 0 };
+	Vector systemVect = { 0, 1, 0 };
 	Vector systemPositionVect = { 0, 0, 0 };
-	particleSyst particlesTest = setupParticleSystem(particleMesh, 20, 0, 0, 10, 0, 0, systemVect, systemPositionVect, simpleRectangle, 20, 20);
+	int maxSize = 200;
+	int spawn_interval = 10;
+	int maxAge = 500;
+	float spread = 5;
+	float minVelocity = 0.1;
+	float maxVelocity = 0.2;
+	spawner_Shapes spawner_shape = simpleRectangle;
+	float param1 = 10;
+	float param2 = 10;
+	particleSyst particlesTest = setupParticleSystem(particleMesh, maxSize, spawn_interval, maxAge, spread, minVelocity, maxVelocity, systemVect, systemPositionVect, spawner_shape, param1, param2);
 
 	srand(time(NULL));
 
