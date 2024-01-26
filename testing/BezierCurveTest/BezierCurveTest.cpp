@@ -19,7 +19,7 @@ void main()
 	ICamera* myCamera = myEngine->CreateCamera(kFPS);
 
 	IMesh* cubeMesh = myEngine->LoadMesh("Cube.x");
-	IMesh* sphereMesh = myEngine->LoadMesh("Susan.x");
+	IMesh* sphereMesh = myEngine->LoadMesh("sphere.x");
 
 	IModel* sphere = sphereMesh->CreateModel(0,0,0);
 

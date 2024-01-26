@@ -45,6 +45,9 @@ struct CurveSegment
 		position.y = (1 - t) * (1 - t) * (1 - t) * points[tInt].posVect.y + 3 * ((1 - t) * (1 - t)) * t * points[tInt + 1].posVect.y + 3 * (1 - t) * t * t * points[tInt + 2].posVect.y + t * t * t * points[tInt + 3].posVect.y;
 		position.z = (1 - t) * (1 - t) * (1 - t) * points[tInt].posVect.z + 3 * ((1 - t) * (1 - t)) * t * points[tInt + 1].posVect.z + 3 * (1 - t) * t * t * points[tInt + 2].posVect.z + t * t * t * points[tInt + 3].posVect.z;
 		
+		// Using the .length value to convay the rotation.
+		position.length = (1 - t) * (1 - t) * (1 - t) * points[tInt].posVect.length + 3 * ((1 - t) * (1 - t)) * t * points[tInt + 1].posVect.length + 3 * (1 - t) * t * t * points[tInt + 2].posVect.length + t * t * t * points[tInt + 3].posVect.length;
+
 		//cout << "\nPos: x= " << position.x << "  y= " << position.y << "  z= " << position.z;
 		return position;
 	}
@@ -76,16 +79,20 @@ struct Curve
 		Vector checkPos;
 		float dist = pos.findDist(curvePos);
 		float checkDist;
+		float closest_t = 0;
+		float rotation = curvePos.length;
 		for (int i = 0; i < size*resolution - 1; i++)
 		{
 			checkPos = posOnCurve(i / resolution);
 			
 			checkDist = pos.findDist(checkPos);
 			if (checkDist < dist) {
+				closest_t = 1 / resolution;
 				dist = checkDist;
-				curvePos = posOnCurve(i / resolution);
+				curvePos = checkPos;
+				float rotation = curvePos.length;
 			}
 		}
-		return { curvePos, {0,0,0}, 0 };
+		return { curvePos, (curvePos - posOnCurve(closest_t + 0.0001)).normalize(), rotation};
 	}
 };
