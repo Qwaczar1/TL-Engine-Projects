@@ -89,6 +89,18 @@ struct Vector
 		z = newVect.z;
 	}
 
+	Vector operator - (Vector vect) {
+		return { x - vect.x, y - vect.y, z - vect.z };
+	}
+
+	Vector operator + (Vector vect) {
+		return { x + vect.x, y + vect.y, z + vect.z };
+	}
+
+	Vector operator *(float a) {
+		return { x * a, y * a, z * a };
+	}
+
 	void move(IModel* model, float factor = 1) {
 		model->Move(x * factor, y * factor, z * factor);
 	}
