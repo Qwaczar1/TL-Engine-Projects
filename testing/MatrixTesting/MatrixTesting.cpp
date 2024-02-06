@@ -25,6 +25,10 @@ void main()
 	cout << "-------------------------------------------\n";
 	boxMatrix.martixFromModel(box);
 	boxMatrix.print();
+	cout << "-------------------------------------------\n";
+	box->RotateY(45);
+	boxMatrix.martixFromModel(box);
+	boxMatrix.print();
 
 	//boxMatrix = boxMatrix * 5;
 	//boxMatrix.print();

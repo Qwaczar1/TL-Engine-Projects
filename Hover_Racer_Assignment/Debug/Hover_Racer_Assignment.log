@@ -1,0 +1,11 @@
+﻿cl : command line  warning D9035: option 'Gm' has been deprecated and will be removed in a future release
+  Hover_Racer_Assignment.cpp
+C:\Users\e_sid\Desktop\TL-Engine Projects\Hover_Racer_Assignment\Bezier.h(3,10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+C:\Users\e_sid\Desktop\TL-Engine Projects\Hover_Racer_Assignment\Bezier.h(4,10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+C:\Users\e_sid\Desktop\TL-Engine Projects\Hover_Racer_Assignment\Bezier.h(34,12): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\e_sid\Desktop\TL-Engine Projects\Hover_Racer_Assignment\Bezier.h(72,12): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\e_sid\Desktop\TL-Engine Projects\Hover_Racer_Assignment\Bezier.h(96,55): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\e_sid\Desktop\TL-Engine Projects\Hover_Racer_Assignment\Hover_Racer_Assignment.cpp(19,101): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\e_sid\Desktop\TL-Engine Projects\Hover_Racer_Assignment\Hover_Racer_Assignment.cpp(24,50): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+  Hover_Racer_Assignment.vcxproj -> C:\Users\e_sid\Desktop\TL-Engine Projects\Hover_Racer_Assignment\Hover_Racer_AssignmentDebug.exe
+  Copying DLLs & shaders...
