@@ -5,6 +5,9 @@ using namespace std;
 using namespace tle;
 
 
+#define PI 3.14159265359f
+
+
 struct Vector
 {
 	float x;
@@ -46,9 +49,12 @@ struct Vector
 
 	Vector normalize() {
 		getLength();
-		Vector normalized{ x / length, y / length, z / length, 1 };
-		//cout << "Normalized Vector x : " << normalized.x << "  y : " << normalized.y << "  z : " << normalized.z;
-		return normalized;
+		if (length != 0 && length != -0) {
+			Vector normalized{ x / length, y / length, z / length, 1 };
+			//cout << "Normalized Vector x : " << normalized.x << "  y : " << normalized.y << "  z : " << normalized.z;
+			return normalized;
+		}
+		return { 0,0,0,0 };
 	}
 
 	float dotProduct(Vector w) {
@@ -109,3 +115,14 @@ struct Vector
 		model->Move(x * factor, y * factor, z * factor);
 	}
 };
+
+float angleDiffrence(Vector v, Vector w) {
+	return acos(v.normalize().dotProduct(w.normalize())) / (PI / 180);
+}
+
+Vector vectAngleDifrence(Vector v, Vector w) {
+	float xDifrence = angleDiffrence({ 0,v.y,v.z }, { 0,w.y,w.z });
+	float yDifrence = angleDiffrence({ v.x,0,v.z }, { w.x,0,w.z });
+	float zDifrence = angleDiffrence({ v.x,v.y,0 }, { w.x,w.y,0 });
+	return { angleDiffrence({0,v.y,v.z}, {0,w.y,w.z}), angleDiffrence({v.x,0,v.z},{w.x,0,w.z}), angleDiffrence({v.x,v.y,0},{w.x,w.y,0}) };
+}

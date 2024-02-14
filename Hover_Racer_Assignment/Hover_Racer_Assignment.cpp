@@ -11,23 +11,26 @@ using namespace tle;
 struct Racer {
 	IModel* model;
 	Vector facingVector = {0,0,1,1};
+	Vector normalVector = { 0,1,0,1 };
 	Vector movementVector = { 0,0,0 };
 	Vector rotationVector = { 0,0,0 };
+	Vector positionvector = { 0,0,0 };
 	float baseSpeed = 10;
+
 
 	void accMovement(float factor) {
 		movementVector = movementVector + facingVector * ((1 / (movementVector.length/10 + 0.1)) * factor * baseSpeed);
 		movementVector.getLength();
 	}
 
-	void accRotation(Vector vector) {
-		rotationVector = rotationVector + vector * ((1 / ((rotationVector.length / (movementVector.length + 1)) / 10 + 0.1)));
+	void accRotation(float factor) {
+	    rotationVector.rotateOn(normalVector, factor * ((1 / ((rotationVector.length / (movementVector.length + 1)) / 10 + 0.1))));
 		rotationVector.getLength();
 	}
 
 	// Applies a downwords vector
 	void gravity(float factor) {
-		movementVector.y -= factor * 10;
+		movementVector.y -= factor * 20;
 		movementVector.getLength();
 	}
 
@@ -51,6 +54,9 @@ struct Racer {
 	}
 
 	void trackColision(Curve track, float factor) {
+
+		//  Finds out if te racer is in colision with the Bezier curve Track, and applies an outwards force to get the racer out of the track.
+
 		float targetDistance = 10;
 		CurvePoint closestPoint = track.closestPoint({ model->GetX(), model->GetY(), model->GetZ() }, 500);
 
@@ -72,19 +78,31 @@ struct Racer {
 		//cout << "\n Dot product = " << dotProduct;
 		//cout << "\n angle math crap = " << abs(dotProduct) * racerPos.length;
 
-		if (dotProduct < 0.0) {
-			racerPos.getLength();
-			float pushPower = abs(dotProduct) * racerPos.length;
-			//cout << "\n Push Power = " << pushPower;
-			trackNormal.setLength(pushPower);
-			//cout << "\n Current Normal : x= " << trackNormal.x << "  y= " << trackNormal.y << "  z= " << trackNormal.z;
-			gravity(-factor);
-			movementVector = movementVector + trackNormal;
-		}
+		racerPos.getLength();
+		if (racerPos.length < 10) {
+			if (dotProduct < 0.0) {
+				float pushPower = abs(dotProduct) * racerPos.length;
+				//cout << "\n Push Power = " << pushPower;
+				trackNormal.setLength(pushPower);
+				//cout << "\n Current Normal : x= " << trackNormal.x << "  y= " << trackNormal.y << "  z= " << trackNormal.z;
+				gravity(-factor);
+				movementVector = movementVector + trackNormal;
 
+				trackNormal = trackNormal.normalize();
+				normalVector = normalVector.normalize();
+				cout << "\n \n trackNormal : x= " << trackNormal.x << "  y= " << trackNormal.y << "  z= " << trackNormal.z;
+				cout << "\n normalVector : x= " << normalVector.x << "  y= " << normalVector.y << "  z= " << normalVector.z;
+				Vector angleDif = vectAngleDifrence(trackNormal, normalVector);
+				rotationVector = rotationVector + angleDif;
+				cout << "\n angleDif : x= " << angleDif.x << "  y= " << angleDif.y << "  z= " << angleDif.z;
+
+			}
+		}
 	}
 
 	void applyVectors(float factor) {
+
+		//   Turns all of the acting vectors to the racer making it move/rotate according to the vectors.
 
 		movementVector.move(model, factor);
 		/*cout << "\n Current direction : x= " << facingVector.x << "  y= " << facingVector.y << "  z= " << facingVector.z;
@@ -92,6 +110,11 @@ struct Racer {
 		facingVector.rotateX(rotationVector.x * (PI / 180));
 		facingVector.rotateY(rotationVector.y * (PI / 180));
 		facingVector.rotateZ(rotationVector.z * (PI / 180));
+
+		normalVector.rotateX(rotationVector.x * (PI / 180));
+		normalVector.rotateY(rotationVector.y * (PI / 180));
+		normalVector.rotateZ(rotationVector.z * (PI / 180));
+
 
 		model->RotateX(rotationVector.x);
 		model->RotateY(rotationVector.y);
@@ -119,16 +142,17 @@ void main()
 	IModel* TestModel = testMesh->CreateModel(0,0,0);
 	IMesh* cubeMesh = myEngine->LoadMesh("Cube.x");
 	IMesh* racerMesh = myEngine->LoadMesh("racer.x");
-	IModel* racerModel = racerMesh->CreateModel();
-	racerModel->RotateLocalY(180);
+	/*IModel* racerModel = racerMesh->CreateModel();
+	racerModel->RotateLocalY(180);*/
 
 	Racer myRacer;
-	myRacer.model = racerModel;
+	myRacer.model = racerMesh->CreateModel();
+	myRacer.model->RotateLocalY(180);
 
 
 	Curve trackCurve;
-	trackCurve.newSegment({ 0,0,0 }, 0, { 0, 5, 55.2125 }, 0, { -43.7876, 10, 100 }, 0, { -100, 15, 100 }, 0);
-	trackCurve.newSegment({ -100, 15, 100}, 0, { -154.213, 10, 100}, 0, { -200, 5, 55.2125 }, 0, { -200, 0, 0}, 0);
+	trackCurve.newSegment({ 0,0,0 }, 0, { 0, 0, 55.2125 }, 0, { -43.7876, 0, 100 }, 0, { -100, 0, 100 }, 0);
+	trackCurve.newSegment({ -100, 0, 100}, 0, { -154.213, 0, 100}, 0, { -200, 0, 55.2125 }, 0, { -200, 0, 0}, 0);
 	trackCurve.newSegment({ -200,0,0 }, 0, { -200, 0, -55.2125 }, 0, { -154.213, 0, -100 }, 0, { -100, 0, -100 }, 0);
 	trackCurve.newSegment({ -100, 0, -100}, 0, { -43.7876, 0, -100}, 0, { 0, 0, -55.2125 }, 0, { 0, 0, 0}, 0);
 
@@ -165,10 +189,10 @@ void main()
 			myRacer.accMovement(-deltaTime);
 		}
 		if (myEngine->KeyHeld(Key_A)) {
-			myRacer.accRotation( { 0, -deltaTime, 0} );
+			myRacer.accRotation(-deltaTime);
 		}
 		if (myEngine->KeyHeld(Key_D)) {
-			myRacer.accRotation( { 0, deltaTime, 0} );
+			myRacer.accRotation(deltaTime);
 		}
 
 		myRacer.gravity(deltaTime);
@@ -177,7 +201,6 @@ void main()
 		myRacer.friction(deltaTime);
 
 		mycamera->SetPosition(myRacer.model->GetX(), myRacer.model->GetY() + 10, myRacer.model->GetZ() - 20);
-
 
 		myRacer.trackColision(trackCurve, deltaTime);
 		myRacer.applyVectors(deltaTime);
