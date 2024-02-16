@@ -114,15 +114,8 @@ struct Vector
 	void move(IModel* model, float factor = 1) {
 		model->Move(x * factor, y * factor, z * factor);
 	}
+
+	void print() {
+		cout << "\n x= " << x << "  y= " << y << "  z= " << z;
+	}
 };
-
-float angleDiffrence(Vector v, Vector w) {
-	return acos(v.normalize().dotProduct(w.normalize())) / (PI / 180);
-}
-
-Vector vectAngleDifrence(Vector v, Vector w) {
-	float xDifrence = angleDiffrence({ 0,v.y,v.z }, { 0,w.y,w.z });
-	float yDifrence = angleDiffrence({ v.x,0,v.z }, { w.x,0,w.z });
-	float zDifrence = angleDiffrence({ v.x,v.y,0 }, { w.x,w.y,0 });
-	return { angleDiffrence({0,v.y,v.z}, {0,w.y,w.z}), angleDiffrence({v.x,0,v.z},{w.x,0,w.z}), angleDiffrence({v.x,v.y,0},{w.x,w.y,0}) };
-}

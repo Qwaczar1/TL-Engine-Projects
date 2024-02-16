@@ -5,26 +5,25 @@ using namespace tle;
 
 #include "Bezier.h"
 #include "Vectors.h"
+#include "Matrices.h"
 
 #define PI 3.14159265359f
 
 struct Racer {
 	IModel* model;
-	Vector facingVector = {0,0,1,1};
-	Vector normalVector = { 0,1,0,1 };
-	Vector movementVector = { 0,0,0 };
-	Vector rotationVector = { 0,0,0 };
-	Vector positionvector = { 0,0,0 };
+	Matrix2D matrix;
+	Vector movementVector = { 0,0,0,0 };
+	Vector rotationVector = { 0,0,0,0 };
 	float baseSpeed = 10;
 
 
 	void accMovement(float factor) {
-		movementVector = movementVector + facingVector * ((1 / (movementVector.length/10 + 0.1)) * factor * baseSpeed);
+		movementVector = movementVector + matrix.vectorizeZ() * ((1 / (movementVector.length * 0.1 + 0.1)) * factor * baseSpeed);
 		movementVector.getLength();
 	}
 
 	void accRotation(float factor) {
-	    rotationVector.rotateOn(normalVector, factor * ((1 / ((rotationVector.length / (movementVector.length + 1)) / 10 + 0.1))));
+	    rotationVector.rotateOn(matrix.vectorizeY(), factor * ((1 / ((rotationVector.length * (movementVector.length + 1)) / 10 + 0.1))));
 		rotationVector.getLength();
 	}
 
@@ -88,14 +87,6 @@ struct Racer {
 				gravity(-factor);
 				movementVector = movementVector + trackNormal;
 
-				trackNormal = trackNormal.normalize();
-				normalVector = normalVector.normalize();
-				cout << "\n \n trackNormal : x= " << trackNormal.x << "  y= " << trackNormal.y << "  z= " << trackNormal.z;
-				cout << "\n normalVector : x= " << normalVector.x << "  y= " << normalVector.y << "  z= " << normalVector.z;
-				Vector angleDif = vectAngleDifrence(trackNormal, normalVector);
-				rotationVector = rotationVector + angleDif;
-				cout << "\n angleDif : x= " << angleDif.x << "  y= " << angleDif.y << "  z= " << angleDif.z;
-
 			}
 		}
 	}
@@ -103,22 +94,18 @@ struct Racer {
 	void applyVectors(float factor) {
 
 		//   Turns all of the acting vectors to the racer making it move/rotate according to the vectors.
+		
+		cout << "\n movementVector : ";
+		movementVector.print();
+		matrix = matrix + movementVector;
+		matrix.print();
 
-		movementVector.move(model, factor);
-		/*cout << "\n Current direction : x= " << facingVector.x << "  y= " << facingVector.y << "  z= " << facingVector.z;
-		cout << "\n input x rotation: " << rotationVector.y * (PI / 180);		*/
-		facingVector.rotateX(rotationVector.x * (PI / 180));
-		facingVector.rotateY(rotationVector.y * (PI / 180));
-		facingVector.rotateZ(rotationVector.z * (PI / 180));
+		cout << "\n rotationVector : ";
+		rotationVector.print();
+		rotateBy(matrix, rotationVector * (PI / 180));
+		matrix.print();
 
-		normalVector.rotateX(rotationVector.x * (PI / 180));
-		normalVector.rotateY(rotationVector.y * (PI / 180));
-		normalVector.rotateZ(rotationVector.z * (PI / 180));
-
-
-		model->RotateX(rotationVector.x);
-		model->RotateY(rotationVector.y);
-		model->RotateZ(rotationVector.z);
+		matrix.matrixToModel(model);
 	}
 };
 
@@ -147,7 +134,8 @@ void main()
 
 	Racer myRacer;
 	myRacer.model = racerMesh->CreateModel();
-	myRacer.model->RotateLocalY(180);
+	myRacer.model->RotateY(180);
+	myRacer.matrix.martixFromModel(myRacer.model);
 
 
 	Curve trackCurve;
@@ -183,10 +171,10 @@ void main()
 		deltaTime = myEngine->Timer();
 
 		if (myEngine->KeyHeld(Key_W)) {
-			myRacer.accMovement(deltaTime);
+			myRacer.accMovement(-deltaTime);
 		} 
 		else if (myEngine->KeyHeld(Key_S)) {
-			myRacer.accMovement(-deltaTime);
+			myRacer.accMovement(deltaTime);
 		}
 		if (myEngine->KeyHeld(Key_A)) {
 			myRacer.accRotation(-deltaTime);
@@ -195,14 +183,15 @@ void main()
 			myRacer.accRotation(deltaTime);
 		}
 
-		myRacer.gravity(deltaTime);
+		// myRacer.gravity(deltaTime);
 		
 
-		myRacer.friction(deltaTime);
+		// myRacer.friction(deltaTime);
 
 		mycamera->SetPosition(myRacer.model->GetX(), myRacer.model->GetY() + 10, myRacer.model->GetZ() - 20);
 
-		myRacer.trackColision(trackCurve, deltaTime);
+		// myRacer.trackColision(trackCurve, deltaTime);
+
 		myRacer.applyVectors(deltaTime);
 	}
 
