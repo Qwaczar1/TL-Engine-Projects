@@ -8,6 +8,7 @@ using namespace tle;
 #define PI 3.14159265359f
 
 
+
 struct Vector
 {
 	float x;
@@ -103,7 +104,7 @@ struct Vector
 		return { x + vect.x, y + vect.y, z + vect.z };
 	}
 
-	Vector operator *(float a) {
+	Vector operator * (float a) {
 		return { x * a, y * a, z * a };
 	}
 
@@ -113,6 +114,18 @@ struct Vector
 
 	void move(IModel* model, float factor = 1) {
 		model->Move(x * factor, y * factor, z * factor);
+	}
+
+	void directionalAline(Vector vect) {
+		if (!((x >= 0 && vect.x >= 0) || (x <= 0 && vect.x <= 0))) {
+			x = -x;
+		}
+		if (!((y >= 0 && vect.y >= 0) || (y <= 0 && vect.y <= 0))) {
+			y = -y;
+		}
+		if (!((z >= 0 && vect.z >= 0) || (z <= 0 && vect.z <= 0))) {
+			z = -z;
+		}
 	}
 
 	void print() {

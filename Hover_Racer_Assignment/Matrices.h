@@ -7,18 +7,40 @@ using namespace std;
 enum axis {
 	X, Y, Z
 };
+
+enum cordSystem {
+	local, global
+};
+
 struct Matrix2D {
-	float matrix[4][4];
+	float matrix[4][4] = {
+		{1,0,0,0},
+		{0,1,0,0},
+		{0,0,1,0},
+		{0,0,0,1}
+	};
 	
 	void martixFromModel(IModel* model) {
 		model->GetMatrix(&matrix[0][0]);
+		
 	}
 
 	void matrixToModel(IModel* model) {
 		model->SetMatrix(matrix[0]);
 	}
 
-
+	void print() {
+		cout << "\n";
+		for (int i = 0; i < 4; i++)
+		{
+			cout << " [ ";
+			for (int j = 0; j < 4; j++)
+			{
+				cout << matrix[i][j] << "  ";
+			}
+			cout << "]\n";
+		}
+	}
 
 	void matrixFromVectors(Vector x, Vector y, Vector z) {
 		matrix[0][0] = { x.x };
@@ -42,6 +64,9 @@ struct Matrix2D {
 	}
 	Vector vectorizeZ() {
 		return { matrix[2][0],matrix[2][1],matrix[2][2] };
+	}
+	Vector vectorizePos() {
+		return { matrix[3][0],matrix[3][1],matrix[3][2] };
 	}
 
 	Matrix2D operator + (Vector input) {
@@ -81,7 +106,8 @@ struct Matrix2D {
 		return output;
 	}
 
-	Matrix2D operator * (Matrix2D input) {
+	// Local multiplication.
+	Matrix2D operator & (Matrix2D input) {
 		Matrix2D output;
 		for (int i = 0; i < 4; i++)
 		{
@@ -90,14 +116,44 @@ struct Matrix2D {
 				output.matrix[i][j] = 0;
 				for (int n = 0; n < 4; n++)
 				{
-					output.matrix[i][j] += matrix[i][n] * input.matrix[n][i];
+					output.matrix[i][j] += matrix[i][n] * input.matrix[n][j];
 				}
 			}
 		}
 		return output;
 	}
 
-	Matrix2D operator * (float input[4][4]) {
+	// Global Multiplication
+	Matrix2D operator * (Matrix2D input) {
+		/*cout << "\n This Matrix: \n";
+		print();
+		cout << "\n multipied by: \n";
+		input.print();*/
+		Matrix2D output;
+		for (int i = 0; i < 4; i++)
+		{
+			//cout << "\n";
+			for (int j = 0; j < 4; j++)
+			{
+				//cout << "[";
+				output.matrix[i][j] = 0;
+				for (int n = 0; n < 4; n++)
+				{
+					//cout << " +" << matrix[i][n] << "*" << input.matrix[n][i];
+					//cout << " " << i << n << "*" << n << j;
+					output.matrix[i][j] += matrix[i][n] * input.matrix[n][j];
+				}
+				//cout << " ]= " << output.matrix[i][j];
+			}
+		}
+		//cout << "\n";
+		output.matrix[3][0] = matrix[3][0];
+		output.matrix[3][1] = matrix[3][1];
+		output.matrix[3][2] = matrix[3][2];
+		return output;
+	}
+
+	/*Matrix2D operator * (float input[4][4]) {
 		Matrix2D output;
 		for (int i = 0; i < 4; i++)
 		{
@@ -111,82 +167,113 @@ struct Matrix2D {
 			}
 		}
 		return output;
-	}
+	}*/
 
-	void print() {
-		cout << "\n";
-		for (int i = 0; i < 4; i++)
+	void normalize(axis xyz) {
+		Vector x = vectorizeX();
+		Vector y = vectorizeY();
+		Vector z = vectorizeZ();
+		switch (xyz)
 		{
-			cout << " [ ";
-			for (int j = 0; j < 4; j++)
-			{
-				cout << matrix[i][j] << "  ";
-			}
-			cout << "]\n";
+		case X:
+			y = x.crossProduct(z);
+			y.directionalAline(vectorizeY());
+			z = x.crossProduct(y);
+			z.directionalAline(vectorizeZ());
+			break;
+		case Y:
+			x = y.crossProduct(z);
+			x.directionalAline(vectorizeX());
+			z = y.crossProduct(x);
+			z.directionalAline(vectorizeZ());
+			break;
+		case Z:
+			y = z.crossProduct(x);
+			y.directionalAline(vectorizeY());
+			x = z.crossProduct(y);
+			x.directionalAline(vectorizeX());
+			break;
+		default:
+			break;
 		}
+		matrixFromVectors(x.normalize(), y.normalize(), z.normalize());
 	}
 };
 
 Matrix2D rotateX(Matrix2D matrix, float angle) {
-	float roationMatrix[4][4] = {
+	Matrix2D roationMatrix = { {
 		{1, 0, 0, 0},
 		{0, cos(-angle), -sin(angle), 0},
 		{0, sin(-angle), cos(-angle), 0},
-		{0, 0, 0, 1} };
+		{0, 0, 0, 1} } };
 	return matrix * roationMatrix;
 }
 Matrix2D rotateY(Matrix2D matrix, float angle) {
-	float roationMatrix[4][4] = {
+	Matrix2D roationMatrix = { {
 		{cos(angle), 0, -sin(angle), 0},
 		{0, 1, 0, 0},
 		{sin(angle), 0, cos(angle), 0},
-		{0, 0, 0, 1} };
+		{0, 0, 0, 1} } };
 	return matrix * roationMatrix;
 }
 Matrix2D rotateZ(Matrix2D matrix, float angle) {
-	float roationMatrix[4][4] = {
+	Matrix2D roationMatrix = { {
 		{cos(angle), sin(angle), 0, 0},
 		{-sin(angle), cos(angle), 0, 0},
 		{0, 0, 1, 0},
-		{0, 0, 0, 1} };
+		{0, 0, 0, 1} } };
 	return matrix * roationMatrix;
 }
 
 Matrix2D rotateBy(Matrix2D matrix, Vector rotation) {
 	return rotateZ(rotateY(rotateX(matrix, rotation.x), rotation.y), rotation.z);
+	
+	
 }
 
 Matrix2D rotateOn(Matrix2D matrix, Vector vect, float angle) {
 	Vector newX = matrix.vectorizeX();
 	newX.rotateOn(vect, angle);
+	cout << "\nnewX: ";
+	newX.print();
 
-	Vector newY = matrix.vectorizeX();
-	newX.rotateOn(vect, angle);
+	Vector newY = matrix.vectorizeY();
+	newY.rotateOn(vect, angle);
+	cout << "\nnewY: ";
+	newY.print();
 
-	Vector newZ = matrix.vectorizeX();
-	newX.rotateOn(vect, angle);
+	Vector newZ = matrix.vectorizeZ();
+	newZ.rotateOn(vect, angle);
+	cout << "\nnewZ: ";
+	newZ.print();
 
-	matrix.matrixFromVectors(newX, newY, newZ);
+	matrix.matrixFromVectors(newX.normalize(), newY.normalize(), newZ.normalize());
 	return matrix;
 }
 
 Matrix2D rotateTo(Matrix2D matrix, axis xyz, Vector target) {
 	Vector axis;
+	float angle;
 	switch (xyz)
 	{
 	case X:
-		axis = matrix.vectorizeX().crossProduct(target);
+		axis = matrix.vectorizeX().normalize().crossProduct(target);
+		angle = matrix.vectorizeX().normalize().angleDiffrence(target);
 		break;
 	case Y:
-		axis = matrix.vectorizeX().crossProduct(target);
+		axis = matrix.vectorizeY().normalize().crossProduct(target);
+		angle = matrix.vectorizeY().normalize().angleDiffrence(target);
 		break;
 	case Z:
-		axis = matrix.vectorizeX().crossProduct(target);
+		axis = matrix.vectorizeZ().normalize().crossProduct(target);
+		angle = matrix.vectorizeZ().normalize().angleDiffrence(target);
 		break;
 	default:
 		break;
 	}
-	float angle = axis.angleDiffrence(target);
-
-	return rotateOn(matrix, axis, angle);
+	axis = axis.normalize();
+	cout << "\n\n PreRotation\n";
+	matrix.print();
+	matrix.normalize(xyz);
+	return rotateOn(matrix, axis, -angle);
 }

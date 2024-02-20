@@ -9,33 +9,50 @@ using namespace tle;
 
 #define PI 3.14159265359f
 
+void viewVector(IModel* model1, IModel* model2, IModel* model3 , Vector vect, Vector pos) {
+	model1->SetPosition(pos.x, pos.y, pos.z);
+	vect.move(model1);
+	model2->SetPosition(pos.x, pos.y, pos.z);
+	vect.move(model2);
+	vect.move(model2);
+	model3->SetPosition(pos.x, pos.y, pos.z);
+	vect.move(model3);
+	vect.move(model3);
+	vect.move(model3);
+
+}
+
 struct Racer {
 	IModel* model;
+	IModel* cubes[6];
 	Matrix2D matrix;
 	Vector movementVector = { 0,0,0,0 };
 	Vector rotationVector = { 0,0,0,0 };
-	float baseSpeed = 10;
+	Vector temp;
+	float baseSpeed = 0.2;
 
 
 	void accMovement(float factor) {
-		movementVector = movementVector + matrix.vectorizeZ() * ((1 / (movementVector.length * 0.1 + 0.1)) * factor * baseSpeed);
+		movementVector = movementVector + matrix.vectorizeZ() * baseSpeed * factor;
 		movementVector.getLength();
 	}
 
 	void accRotation(float factor) {
-	    rotationVector.rotateOn(matrix.vectorizeY(), factor * ((1 / ((rotationVector.length * (movementVector.length + 1)) / 10 + 0.1))));
+	    //rotationVector.rotateOn(matrix.vectorizeY(), factor * ((1 / ((rotationVector.length * (movementVector.length + 1)) / 10 + 0.1))));
+
+		rotationVector = rotationVector + matrix.vectorizeY() * ((1 / (rotationVector.length * 0.1 + 0.1)) * factor);
 		rotationVector.getLength();
 	}
 
 	// Applies a downwords vector
 	void gravity(float factor) {
-		movementVector.y -= factor * 20;
+		movementVector.y -= factor * 0.1;
 		movementVector.getLength();
 	}
 
 	void friction(float factor) {
 		// motion friction
-		float force = factor * 10;
+		float force = (factor * movementVector.length * movementVector.length) + (factor * 0.05);
 		if (movementVector.length > force) {
 			movementVector.setLength(movementVector.length - force);
 		}
@@ -43,7 +60,7 @@ struct Racer {
 			movementVector = { 0,0,0,0 };
 		}
 		// rotation friction
-		force = factor * 2;
+		force = factor * rotationVector.length;
 		if (rotationVector.length > force) {
 			rotationVector.setLength(rotationVector.length - force);
 		}
@@ -57,12 +74,26 @@ struct Racer {
 		//  Finds out if te racer is in colision with the Bezier curve Track, and applies an outwards force to get the racer out of the track.
 
 		float targetDistance = 10;
-		CurvePoint closestPoint = track.closestPoint({ model->GetX(), model->GetY(), model->GetZ() }, 500);
+		CurvePoint closestPoint = track.closestPoint(matrix.vectorizePos(), 500);
 
 		// Getting a track normal vector for the closest track point.
+
+
+
 		Vector trackNormal = { -closestPoint.facingVect.z, 0, closestPoint.facingVect.x };
 		trackNormal.rotateOn(closestPoint.facingVect, closestPoint.rotation);
 		trackNormal = trackNormal.normalize().crossProduct(closestPoint.facingVect.normalize());
+
+		viewVector(cubes[0], cubes[1], cubes[2], trackNormal, closestPoint.posVect);
+		viewVector(cubes[3], cubes[4], cubes[5], closestPoint.facingVect, closestPoint.posVect);
+
+		cout << "\n dotProduct: " << matrix.vectorizeY().normalize().dotProduct(trackNormal.normalize());
+		if (matrix.vectorizeY().normalize().dotProduct(trackNormal.normalize()) < 0.9999) {
+			matrix = rotateTo(matrix, Y, trackNormal.normalize());
+
+			cout << "\nmatrix: \n";
+			matrix.print();
+		}
 
 		/*cout << "\n Current Normal : x= " << trackNormal.x << "  y= " << trackNormal.y << "  z= " << trackNormal.z;*/
 
@@ -87,6 +118,7 @@ struct Racer {
 				gravity(-factor);
 				movementVector = movementVector + trackNormal;
 
+				
 			}
 		}
 	}
@@ -94,17 +126,9 @@ struct Racer {
 	void applyVectors(float factor) {
 
 		//   Turns all of the acting vectors to the racer making it move/rotate according to the vectors.
-		
-		cout << "\n movementVector : ";
-		movementVector.print();
 		matrix = matrix + movementVector;
-		matrix.print();
-
-		cout << "\n rotationVector : ";
-		rotationVector.print();
-		rotateBy(matrix, rotationVector * (PI / 180));
-		matrix.print();
-
+		matrix = rotateBy(matrix, rotationVector * (PI / 180));
+		
 		matrix.matrixToModel(model);
 	}
 };
@@ -125,8 +149,13 @@ void main()
 
 	ICamera* mycamera = myEngine->CreateCamera(kFPS);
 
-	IMesh* testMesh = myEngine->LoadMesh("TestTrack1.x");
+	IMesh* testMesh = myEngine->LoadMesh("MainTrack.x");
 	IModel* TestModel = testMesh->CreateModel(0,0,0);
+
+	float trackScale = 60;
+
+	TestModel->Scale(60);
+
 	IMesh* cubeMesh = myEngine->LoadMesh("Cube.x");
 	IMesh* racerMesh = myEngine->LoadMesh("racer.x");
 	/*IModel* racerModel = racerMesh->CreateModel();
@@ -134,12 +163,15 @@ void main()
 
 	Racer myRacer;
 	myRacer.model = racerMesh->CreateModel();
-	myRacer.model->RotateY(180);
-	myRacer.matrix.martixFromModel(myRacer.model);
-
+	for (int i = 0; i < 6; i++)
+	{
+		myRacer.cubes[i] = cubeMesh->CreateModel();
+		myRacer.cubes[i]->Scale(0.02);
+	}
+	
 
 	Curve trackCurve;
-	trackCurve.newSegment({ 0,0,0 }, 0, { 0, 0, 55.2125 }, 0, { -43.7876, 0, 100 }, 0, { -100, 0, 100 }, 0);
+	trackCurve.newSegment({ 0,0,0 }, 0, { 0, 0, 55.2125 }, 0, { -43.7876, 50, 100 }, 0, { -100, 0, 100 }, 0);
 	trackCurve.newSegment({ -100, 0, 100}, 0, { -154.213, 0, 100}, 0, { -200, 0, 55.2125 }, 0, { -200, 0, 0}, 0);
 	trackCurve.newSegment({ -200,0,0 }, 0, { -200, 0, -55.2125 }, 0, { -154.213, 0, -100 }, 0, { -100, 0, -100 }, 0);
 	trackCurve.newSegment({ -100, 0, -100}, 0, { -43.7876, 0, -100}, 0, { 0, 0, -55.2125 }, 0, { 0, 0, 0}, 0);
@@ -147,18 +179,53 @@ void main()
 	IModel* cubes[4000];
 	Vector temp;
 
-	for (int i = 0; i <= trackCurve.size * 500; i++)
+	for (int i = 0, o = 0; i <= trackCurve.size * 50; i++)
 	{
 		cubes[i] = cubeMesh->CreateModel();
-		temp = trackCurve.posOnCurve(i / 500.0f);
+		o = i / 50.0f;
+		temp = trackCurve.posOnCurve(i / 50.0f);
+		cout << "\n";
+		temp.print();
 		temp.move(cubes[i]);
-		cubes[i]->Scale(0.1);
+		cubes[i]->Scale(0.05);
 	}
 
 	float deltaTime = myEngine->Timer();
 
 	mycamera->RotateLocalX(20);
 
+	/*myRacer.model->RotateY(45);
+	myRacer.matrix.martixFromModel(myRacer.model);
+	myRacer.matrix.print();
+
+	myRacer.model->RotateLocalY(45);
+	myRacer.matrix.martixFromModel(myRacer.model);
+	myRacer.matrix.print();
+
+	myRacer.model->MoveX(5);
+	myRacer.matrix.martixFromModel(myRacer.model);
+	myRacer.matrix.print();
+
+	myRacer.model->MoveLocalX(5);
+	myRacer.matrix.martixFromModel(myRacer.model);
+	myRacer.matrix.print();
+
+	float matrix44[4][4] = {
+		{0,0,-1,0},
+		{0,1,0,0},
+		{1,0,0,0},
+		{5,0,-5,1}
+	};
+	myRacer.model->SetMatrix(matrix44[0]);*/
+
+	/*myRacer.matrix = rotateY(myRacer.matrix, 45 * (PI / 180));
+	myRacer.matrix.print();
+	myRacer.matrix = rotateY(myRacer.matrix, 45 * (PI / 180));
+	myRacer.matrix.print();
+
+	myRacer.matrix.matrixToModel(myRacer.model);*/
+
+	
 	// The main game loop, repeat until engine is stopped
 	while (myEngine->IsRunning())
 	{
@@ -183,16 +250,20 @@ void main()
 			myRacer.accRotation(deltaTime);
 		}
 
-		// myRacer.gravity(deltaTime);
+		myRacer.gravity(deltaTime);
 		
 
-		// myRacer.friction(deltaTime);
+		myRacer.friction(deltaTime);
 
 		mycamera->SetPosition(myRacer.model->GetX(), myRacer.model->GetY() + 10, myRacer.model->GetZ() - 20);
 
-		// myRacer.trackColision(trackCurve, deltaTime);
+		myRacer.trackColision(trackCurve, deltaTime);
+
+		//myRacer.matrix = rotateOn(myRacer.matrix, { 1,1,1 }, 0.01);
 
 		myRacer.applyVectors(deltaTime);
+
+		
 	}
 
 	// Delete the 3D engine now we are finished with it

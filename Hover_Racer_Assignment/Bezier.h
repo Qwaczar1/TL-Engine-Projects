@@ -51,11 +51,19 @@ struct CurveSegment
 		//cout << "\nPos: x= " << position.x << "  y= " << position.y << "  z= " << position.z;
 		return position;
 	}
+
+	Vector derivitive(float t) {
+		int tInt = t;
+		t -= tInt;
+		tInt *= 3;
+
+		return ((points[tInt + 1].posVect - points[tInt].posVect) * (3 * ((1 - t) * (1 - t)))) + ((points[tInt + 2].posVect - points[tInt + 1].posVect) * (6 * (1 - t) * t)) + ((points[3].posVect - points[2].posVect) * ((3 * t * t) * (3 * t * t)));
+	}
 };
 
-struct Curve 
+struct Curve
 {
-	CurveSegment segments[10];
+	CurveSegment segments[50];
 	int size = 0;
 
 	void newSegment(Vector p1, float r1, Vector p2, float r2, Vector p3, float r3, Vector p4, float r4) {
@@ -68,6 +76,7 @@ struct Curve
 		size++;
 	}
 
+
 	Vector posOnCurve(float t) {
 		int tInt = t;
 		//cout << "\nt = " << t << "  tInt = " << tInt;
@@ -75,24 +84,24 @@ struct Curve
 	}
 
 	CurvePoint closestPoint(Vector pos, float resolution) {
-		Vector curvePos = posOnCurve(0);
+		Vector curvePos = segments[0].posOnSegment(0);
 		Vector checkPos;
 		float dist = pos.findDist(curvePos);
 		float checkDist;
-		float closest_t = 0;
+		float closest_i = 0;
 		float rotation = curvePos.length;
-		for (int i = 0; i < size*resolution - 1; i++)
+		for (int i = 0; i < size * resolution - 1; i++)
 		{
 			checkPos = posOnCurve(i / resolution);
-			
+
 			checkDist = pos.findDist(checkPos);
 			if (checkDist < dist) {
-				closest_t = 1 / resolution;
+				closest_i = i;
 				dist = checkDist;
 				curvePos = checkPos;
-				float rotation = curvePos.length;
+				rotation = curvePos.length;
 			}
 		}
-		return { curvePos, (curvePos - posOnCurve(closest_t + 0.0001)).normalize(), rotation};
+		return { curvePos, (curvePos - posOnCurve(closest_i / resolution + 0.0001)).normalize(), rotation };
 	}
 };
