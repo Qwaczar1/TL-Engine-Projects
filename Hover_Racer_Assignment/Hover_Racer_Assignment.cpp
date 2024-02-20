@@ -149,12 +149,14 @@ void main()
 
 	ICamera* mycamera = myEngine->CreateCamera(kFPS);
 
-	IMesh* testMesh = myEngine->LoadMesh("MainTrack.x");
-	IModel* TestModel = testMesh->CreateModel(0,0,0);
+	IMesh* TrackMesh = myEngine->LoadMesh("MainTrack.x");
+	IModel* MainTrack = TrackMesh->CreateModel(0,0,0);
+
+	MainTrack->RotateY(90);
 
 	float trackScale = 60;
 
-	TestModel->Scale(60);
+	MainTrack->Scale(60);
 
 	IMesh* cubeMesh = myEngine->LoadMesh("Cube.x");
 	IMesh* racerMesh = myEngine->LoadMesh("racer.x");
@@ -169,21 +171,38 @@ void main()
 		myRacer.cubes[i]->Scale(0.02);
 	}
 	
+	mycamera->SetPosition(myRacer.model->GetX(), myRacer.model->GetY() + 10, myRacer.model->GetZ() + 20);
+	mycamera->RotateLocalX(-20);
+	mycamera->RotateLocalY(180);
+	mycamera->AttachToParent(myRacer.model);
 
 	Curve trackCurve;
-	trackCurve.newSegment({ 0,0,0 }, 0, { 0, 0, 55.2125 }, 0, { -43.7876, 50, 100 }, 0, { -100, 0, 100 }, 0);
-	trackCurve.newSegment({ -100, 0, 100}, 0, { -154.213, 0, 100}, 0, { -200, 0, 55.2125 }, 0, { -200, 0, 0}, 0);
-	trackCurve.newSegment({ -200,0,0 }, 0, { -200, 0, -55.2125 }, 0, { -154.213, 0, -100 }, 0, { -100, 0, -100 }, 0);
-	trackCurve.newSegment({ -100, 0, -100}, 0, { -43.7876, 0, -100}, 0, { 0, 0, -55.2125 }, 0, { 0, 0, 0}, 0);
+	trackCurve.newSegment({ 0.618465,2.1018,0.010918 }, 0, { 0.290103, 1.62184, 0.010918 }, 0, { -0.152559, 1.69943, 0.016881 }, 0, { -0.843004, 1.70675, 0.016881 }, 0);
+	trackCurve.newSegment({ -0.843004, 1.70675, 0.016881 }, 0, { -1.47163, 1.71341, 0.016881 }, 0, { -2.14434, 1.47552, 0.019571 }, 0, { -2.14196, 0.743453, 0.019571 }, 0);
+	trackCurve.newSegment({ -2.14196, 0.743453, 0.019571 }, 0, { -2.14002, 0.148229, 0.019571 }, 0, { -2.28075, -0.039035, 0.007296 }, 0, { -1.43852, -0.50615, 0.007296 }, 0);
+	trackCurve.newSegment({ -1.43852, -0.50615, 0.007296 }, 0, { -0.596296, -0.973263, 0.007296 }, 0, { -0.836632, -0.986421, 1.12413 }, 90, { -1.53644, -0.598294, 1.12413 }, 180);
+	trackCurve.newSegment({ -1.53644, -0.598294, 1.12413 }, 180, { -2.14049,-0.263278,1.12413 }, 90, { -2.3426,-0.191958,0.015372 }, 0, { -1.65757,-0.649594,0.015372 }, 0);
+	trackCurve.newSegment({ -1.65757,-0.649594,0.015372 }, 0, { -0.527314,-1.40467,0.015372 }, 0, { 0.291053,-1.34521,-0.038012 }, 0, { 0,-2.12294,0.219752 }, 0);
+	trackCurve.newSegment({ 0,-2.12294,0.219752 }, 0, { -0.291432,-2.90168,0.477852 }, 0, { -1.85921,-2.91416,0.416732 }, 0, { -2.21183,-2.12294,0.504054 }, 0);
+	trackCurve.newSegment({ -2.21183,-2.12294,0.504054 }, 0, { -2.38925,-1.72483,0.547991 }, 0, { -1.31862,-0.182002,0.440243 }, 0, { -0.928724,0.037519,0.376895 }, 0);
+	trackCurve.newSegment({ -0.928724,0.037519,0.376895 }, 0, { -0.266648,0.410284,0.269324 }, 0, { 0.464526,-0.528374,0.234164 }, 0, { 1,0,0.131925 }, 0);
+	trackCurve.newSegment({ 1,0,0.131925 }, 0, { 1.5267,0.519715,0.031361 }, 0, { 0.887217,1.17088,0.002681 }, 0, { 1,1.90886,0.010659 }, 0);
+	trackCurve.newSegment({ 1,1.90886,0.010659 }, 0, { 1.07112,2.37421,0.015689 }, 0, { 1.62465,2.91317,0 }, 0, { 1.36005,3.05959,0 }, 0);
+	trackCurve.newSegment({ 1.36005,3.05959,0 }, 0, { 1.10641,3.19994,0 }, 0, { 0.946825,2.58176,0.010918 }, 0, { 0.618465,2.1018,0.010918 }, 0);
 
-	IModel* cubes[4000];
+	trackCurve.move({ 0, -0.015654, -1.72883 });
+
+
+	trackCurve.scale(trackScale);
+
+	IModel* cubes[5000];
 	Vector temp;
 
-	for (int i = 0, o = 0; i <= trackCurve.size * 50; i++)
+	for (int i = 0, o = 0; i <= trackCurve.size * 200; i++)
 	{
 		cubes[i] = cubeMesh->CreateModel();
-		o = i / 50.0f;
-		temp = trackCurve.posOnCurve(i / 50.0f);
+		o = i / 200.0f;
+		temp = trackCurve.posOnCurve(i / 200.0f);
 		cout << "\n";
 		temp.print();
 		temp.move(cubes[i]);
@@ -192,7 +211,6 @@ void main()
 
 	float deltaTime = myEngine->Timer();
 
-	mycamera->RotateLocalX(20);
 
 	/*myRacer.model->RotateY(45);
 	myRacer.matrix.martixFromModel(myRacer.model);
@@ -255,7 +273,7 @@ void main()
 
 		myRacer.friction(deltaTime);
 
-		mycamera->SetPosition(myRacer.model->GetX(), myRacer.model->GetY() + 10, myRacer.model->GetZ() - 20);
+		
 
 		myRacer.trackColision(trackCurve, deltaTime);
 

@@ -68,14 +68,70 @@ struct Curve
 
 	void newSegment(Vector p1, float r1, Vector p2, float r2, Vector p3, float r3, Vector p4, float r4) {
 		CurveSegment newSeg;
-		newSeg.newPoint(p1.x, p1.y, p1.z, r1);
-		newSeg.newPoint(p2.x, p2.y, p2.z, r2);
-		newSeg.newPoint(p3.x, p3.y, p3.z, r3);
-		newSeg.newPoint(p4.x, p4.y, p4.z, r4);
+		newSeg.newPoint(p1.x, p1.z, p1.y, r1);
+		newSeg.newPoint(p2.x, p2.z, p2.y, r2);
+		newSeg.newPoint(p3.x, p3.z, p3.y, r3);
+		newSeg.newPoint(p4.x, p4.z, p4.y, r4);
 		segments[size] = newSeg;
 		size++;
 	}
 
+	void move(Vector input) {
+		for (int i = 0; i < size; i++)
+		{
+			for (int j = 0; j < segments[i].size; j++)
+			{
+				segments[i].points[j].posVect = segments[i].points[j].posVect + input;
+			}
+		}
+	}
+
+	void scale (float input) {
+		for (int i = 0; i < size; i++)
+		{
+			for (int j = 0; j < segments[i].size; j++)
+			{
+				segments[i].points[j].posVect = segments[i].points[j].posVect * input;
+			}
+		}
+	}
+
+	void rotate(axis xyz, float angle) {
+
+		switch (xyz)
+		{
+		case X:
+			for (int i = 0; i < size; i++)
+			{
+				for (int j = 0; j < segments[i].size; j++)
+				{
+					segments[i].points[j].posVect.rotateX(angle);
+				}
+			}
+			break;
+		case Y:
+			for (int i = 0; i < size; i++)
+			{
+				for (int j = 0; j < segments[i].size; j++)
+				{
+					segments[i].points[j].posVect.rotateY(angle);
+				}
+			}
+			break;
+		case Z:
+			for (int i = 0; i < size; i++)
+			{
+				for (int j = 0; j < segments[i].size; j++)
+				{
+					segments[i].points[j].posVect.rotateZ(angle);
+				}
+			}
+			break;
+		default:
+			break;
+		}
+		
+	}
 
 	Vector posOnCurve(float t) {
 		int tInt = t;
