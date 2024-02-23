@@ -90,10 +90,15 @@ struct Vector
 	}
 
 	void rotateOn(Vector axis, float angle) {
-		Vector newVect = addVector(axis.multiplyVector(1 - cos(angle)).crossProduct(crossProduct(axis))).addVector(crossProduct(axis.multiplyVector(sin(angle))));
-		x = newVect.x;
-		y = newVect.y;
-		z = newVect.z;
+		angle = angle / 100;
+		Vector newVect;
+		for (size_t i = 0; i < 100; i++)
+		{
+			newVect = addVector(axis.multiplyVector(1 - cos(angle)).crossProduct(crossProduct(axis))).addVector(crossProduct(axis.multiplyVector(sin(angle))));
+			x = newVect.x;
+			y = newVect.y;
+			z = newVect.z;
+		}
 	}
 
 	Vector operator - (Vector vect) {

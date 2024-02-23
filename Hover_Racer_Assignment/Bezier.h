@@ -8,8 +8,8 @@
 struct CurvePoint
 {
 	Vector posVect;
+	float rotation = 0;
 	Vector facingVect;
-	float rotation;
 };
 
 struct CurveSegment 
@@ -30,7 +30,7 @@ struct CurveSegment
 	}
 
 
-	Vector posOnSegment(float t) {
+	CurvePoint posOnSegment(float t) {
 		int tInt = t;
 		t -= tInt;
 		tInt *= 3;
@@ -40,14 +40,14 @@ struct CurveSegment
 		//cout << "\nControl Point 1: x= " << points[tInt + 1].posVect.x << "  y= " << points[tInt + 1].posVect.y << "  z= " << points[tInt + 1].posVect.z;
 		//cout << "\nControl Point 2: x= " << points[tInt + 2].posVect.x << "  y= " << points[tInt + 2].posVect.y << "  z= " << points[tInt + 2].posVect.z;
 		//cout << "\nControl Point 3: x= " << points[tInt + 3].posVect.x << "  y= " << points[tInt + 3].posVect.y << "  z= " << points[tInt + 3].posVect.z;
-		Vector position;
-		position.x = (1 - t) * (1 - t) * (1 - t) * points[tInt].posVect.x + 3 * ((1 - t) * (1 - t)) * t * points[tInt + 1].posVect.x + 3 * (1 - t) * t * t * points[tInt + 2].posVect.x + t * t * t * points[tInt + 3].posVect.x;
-		position.y = (1 - t) * (1 - t) * (1 - t) * points[tInt].posVect.y + 3 * ((1 - t) * (1 - t)) * t * points[tInt + 1].posVect.y + 3 * (1 - t) * t * t * points[tInt + 2].posVect.y + t * t * t * points[tInt + 3].posVect.y;
-		position.z = (1 - t) * (1 - t) * (1 - t) * points[tInt].posVect.z + 3 * ((1 - t) * (1 - t)) * t * points[tInt + 1].posVect.z + 3 * (1 - t) * t * t * points[tInt + 2].posVect.z + t * t * t * points[tInt + 3].posVect.z;
+		CurvePoint position = { {
+		(1 - t) * (1 - t) * (1 - t) * points[tInt].posVect.x + 3 * ((1 - t) * (1 - t)) * t * points[tInt + 1].posVect.x + 3 * (1 - t) * t * t * points[tInt + 2].posVect.x + t * t * t * points[tInt + 3].posVect.x,
+		(1 - t) * (1 - t) * (1 - t) * points[tInt].posVect.y + 3 * ((1 - t) * (1 - t)) * t * points[tInt + 1].posVect.y + 3 * (1 - t) * t * t * points[tInt + 2].posVect.y + t * t * t * points[tInt + 3].posVect.y,
+		(1 - t) * (1 - t) * (1 - t) * points[tInt].posVect.z + 3 * ((1 - t) * (1 - t)) * t * points[tInt + 1].posVect.z + 3 * (1 - t) * t * t * points[tInt + 2].posVect.z + t * t * t * points[tInt + 3].posVect.z }
+		, (1 - t)* (1 - t)* (1 - t)* points[tInt].rotation + 3 * ((1 - t) * (1 - t)) * t * points[tInt + 1].rotation + 3 * (1 - t) * t * t * points[tInt + 2].rotation + t * t * t * points[tInt + 3].rotation };
 		
 		// Using the .length value to convay the rotation.
-		position.length = (1 - t) * (1 - t) * (1 - t) * points[tInt].posVect.length + 3 * ((1 - t) * (1 - t)) * t * points[tInt + 1].posVect.length + 3 * (1 - t) * t * t * points[tInt + 2].posVect.length + t * t * t * points[tInt + 3].posVect.length;
-
+		
 		//cout << "\nPos: x= " << position.x << "  y= " << position.y << "  z= " << position.z;
 		return position;
 	}
@@ -133,31 +133,32 @@ struct Curve
 		
 	}
 
-	Vector posOnCurve(float t) {
+	CurvePoint posOnCurve(float t) {
 		int tInt = t;
 		//cout << "\nt = " << t << "  tInt = " << tInt;
 		return segments[tInt].posOnSegment(t - tInt);
 	}
 
 	CurvePoint closestPoint(Vector pos, float resolution) {
-		Vector curvePos = segments[0].posOnSegment(0);
-		Vector checkPos;
-		float dist = pos.findDist(curvePos);
+		CurvePoint curvePos = segments[0].posOnSegment(0);
+		CurvePoint checkPos;
+		float closestDist = pos.findDist(curvePos.posVect);
 		float checkDist;
 		float closest_i = 0;
-		float rotation = curvePos.length;
 		for (int i = 0; i < size * resolution - 1; i++)
 		{
 			checkPos = posOnCurve(i / resolution);
 
-			checkDist = pos.findDist(checkPos);
-			if (checkDist < dist) {
+			checkDist = pos.findDist(checkPos.posVect);
+			if (checkDist < closestDist) {
 				closest_i = i;
-				dist = checkDist;
+				closestDist = checkDist;
 				curvePos = checkPos;
-				rotation = curvePos.length;
 			}
 		}
-		return { curvePos, (curvePos - posOnCurve(closest_i / resolution + 0.0001)).normalize(), rotation };
+		int tInt = closest_i;
+		curvePos = { curvePos.posVect, curvePos.rotation, (curvePos.posVect - posOnCurve(closest_i / resolution - 0.0001).posVect).normalize()};
+		cout << "\n rotation = " << curvePos.rotation;
+		return curvePos;
 	}
 };

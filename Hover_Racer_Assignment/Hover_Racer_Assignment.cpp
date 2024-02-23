@@ -28,8 +28,7 @@ struct Racer {
 	Matrix2D matrix;
 	Vector movementVector = { 0,0,0,0 };
 	Vector rotationVector = { 0,0,0,0 };
-	Vector temp;
-	float baseSpeed = 0.2;
+	float baseSpeed = 0.5;
 
 
 	void accMovement(float factor) {
@@ -74,21 +73,23 @@ struct Racer {
 		//  Finds out if te racer is in colision with the Bezier curve Track, and applies an outwards force to get the racer out of the track.
 
 		float targetDistance = 10;
-		CurvePoint closestPoint = track.closestPoint(matrix.vectorizePos(), 500);
+		CurvePoint closestPoint = track.closestPoint(matrix.vectorizePos(), 5000);
 
 		// Getting a track normal vector for the closest track point.
 
 
 
 		Vector trackNormal = { -closestPoint.facingVect.z, 0, closestPoint.facingVect.x };
+		trackNormal = trackNormal.normalize();
 		trackNormal.rotateOn(closestPoint.facingVect, closestPoint.rotation);
-		trackNormal = trackNormal.normalize().crossProduct(closestPoint.facingVect.normalize());
 
+		
+		trackNormal = trackNormal.normalize().crossProduct(closestPoint.facingVect.normalize());
 		viewVector(cubes[0], cubes[1], cubes[2], trackNormal, closestPoint.posVect);
 		viewVector(cubes[3], cubes[4], cubes[5], closestPoint.facingVect, closestPoint.posVect);
 
 		cout << "\n dotProduct: " << matrix.vectorizeY().normalize().dotProduct(trackNormal.normalize());
-		if (matrix.vectorizeY().normalize().dotProduct(trackNormal.normalize()) < 0.9999) {
+		if (matrix.vectorizeY().normalize().dotProduct(trackNormal.normalize()) < 0.999999) {
 			matrix = rotateTo(matrix, Y, trackNormal.normalize());
 
 			cout << "\nmatrix: \n";
@@ -109,7 +110,7 @@ struct Racer {
 		//cout << "\n angle math crap = " << abs(dotProduct) * racerPos.length;
 
 		racerPos.getLength();
-		if (racerPos.length < 10) {
+		if (racerPos.length < 6) {
 			if (dotProduct < 0.0) {
 				float pushPower = abs(dotProduct) * racerPos.length;
 				//cout << "\n Push Power = " << pushPower;
@@ -120,6 +121,11 @@ struct Racer {
 
 				
 			}
+		}
+		else {
+			racerPos.setLength(racerPos.length - 6);
+			movementVector = movementVector - racerPos;
+			
 		}
 	}
 
@@ -144,19 +150,34 @@ void main()
 	// Add default folder for meshes and other media
 	myEngine->AddMediaFolder( "C:\\ProgramData\\TL-Engine\\Media" );
 	myEngine->AddMediaFolder("./Media");
+	myEngine->AddMediaFolder("./Media/Track");
 
 	/**** Set up your scene here ****/
 
 	ICamera* mycamera = myEngine->CreateCamera(kFPS);
 
-	IMesh* TrackMesh = myEngine->LoadMesh("MainTrack.x");
-	IModel* MainTrack = TrackMesh->CreateModel(0,0,0);
+	IMesh* TrackMesh = myEngine->LoadMesh("HoverRacerTrackV2Track.x");
+	IMesh* TubeMesh = myEngine->LoadMesh("HoverRacerTrackV2Tube.x");
+	IMesh* IslandMesh = myEngine->LoadMesh("HoverRacerTrackV2Island.x");
+	IMesh* SupportsMesh = myEngine->LoadMesh("HoverRacerTrackV2Supports.x");
+	IMesh* TopWaterMesh = myEngine->LoadMesh("HoverRacerTrackV2TopWater.x");
+	IMesh* BottomWaterMesh = myEngine->LoadMesh("HoverRacerTrackV2BottomWater.x");
+	
+	IModel* Track = TrackMesh->CreateModel(0,0,0);
+	Track->RotateY(-90);
+	IModel* Tube = TubeMesh->CreateModel(0,0,0);
+	Tube->RotateY(-90);
+	IModel* Island = IslandMesh->CreateModel(0,0,0);
+	Island->RotateY(-90);
+	IModel* Suports = SupportsMesh->CreateModel(0,0,0);
+	Suports->RotateY(-90);
+	IModel* TopWater = TopWaterMesh->CreateModel(0,0,0);
+	TopWater->RotateY(-90);
+	IModel* BottomWater = BottomWaterMesh->CreateModel(0,0,0);
+	BottomWater->RotateY(-90);
 
-	MainTrack->RotateY(90);
+	float trackScale = 90;
 
-	float trackScale = 60;
-
-	MainTrack->Scale(60);
 
 	IMesh* cubeMesh = myEngine->LoadMesh("Cube.x");
 	IMesh* racerMesh = myEngine->LoadMesh("racer.x");
@@ -177,11 +198,11 @@ void main()
 	mycamera->AttachToParent(myRacer.model);
 
 	Curve trackCurve;
-	trackCurve.newSegment({ 0.618465,2.1018,0.010918 }, 0, { 0.290103, 1.62184, 0.010918 }, 0, { -0.152559, 1.69943, 0.016881 }, 0, { -0.843004, 1.70675, 0.016881 }, 0);
+	trackCurve.newSegment({ 0.618465,2.1018,0.010918 }, 0, {0.290103, 1.62184, 0.010918}, 0, {-0.152559, 1.69943, 0.016881}, 0, {-0.843004, 1.70675, 0.016881}, 0);
 	trackCurve.newSegment({ -0.843004, 1.70675, 0.016881 }, 0, { -1.47163, 1.71341, 0.016881 }, 0, { -2.14434, 1.47552, 0.019571 }, 0, { -2.14196, 0.743453, 0.019571 }, 0);
 	trackCurve.newSegment({ -2.14196, 0.743453, 0.019571 }, 0, { -2.14002, 0.148229, 0.019571 }, 0, { -2.28075, -0.039035, 0.007296 }, 0, { -1.43852, -0.50615, 0.007296 }, 0);
-	trackCurve.newSegment({ -1.43852, -0.50615, 0.007296 }, 0, { -0.596296, -0.973263, 0.007296 }, 0, { -0.836632, -0.986421, 1.12413 }, 90, { -1.53644, -0.598294, 1.12413 }, 180);
-	trackCurve.newSegment({ -1.53644, -0.598294, 1.12413 }, 180, { -2.14049,-0.263278,1.12413 }, 90, { -2.3426,-0.191958,0.015372 }, 0, { -1.65757,-0.649594,0.015372 }, 0);
+	trackCurve.newSegment({ -1.43852, -0.50615, 0.007296 }, 0, { -0.596296, -0.973263, 0.007296 }, 0, { -0.836632, -0.986421, 1.12413 }, PI*0.5, { -1.53644, -0.598294, 1.12413 }, PI);
+	trackCurve.newSegment({ -1.53644, -0.598294, 1.12413 }, PI, { -2.14049,-0.263278,1.12413 }, PI*1.5, { -2.3426,-0.191958,0.015372 }, PI*2, { -1.65757,-0.649594,0.015372 }, PI*2);
 	trackCurve.newSegment({ -1.65757,-0.649594,0.015372 }, 0, { -0.527314,-1.40467,0.015372 }, 0, { 0.291053,-1.34521,-0.038012 }, 0, { 0,-2.12294,0.219752 }, 0);
 	trackCurve.newSegment({ 0,-2.12294,0.219752 }, 0, { -0.291432,-2.90168,0.477852 }, 0, { -1.85921,-2.91416,0.416732 }, 0, { -2.21183,-2.12294,0.504054 }, 0);
 	trackCurve.newSegment({ -2.21183,-2.12294,0.504054 }, 0, { -2.38925,-1.72483,0.547991 }, 0, { -1.31862,-0.182002,0.440243 }, 0, { -0.928724,0.037519,0.376895 }, 0);
@@ -190,22 +211,21 @@ void main()
 	trackCurve.newSegment({ 1,1.90886,0.010659 }, 0, { 1.07112,2.37421,0.015689 }, 0, { 1.62465,2.91317,0 }, 0, { 1.36005,3.05959,0 }, 0);
 	trackCurve.newSegment({ 1.36005,3.05959,0 }, 0, { 1.10641,3.19994,0 }, 0, { 0.946825,2.58176,0.010918 }, 0, { 0.618465,2.1018,0.010918 }, 0);
 
-	trackCurve.move({ 0, -0.015654, -1.72883 });
-
+	trackCurve.move({ 0.898, -0.015654, -1.705 });
 
 	trackCurve.scale(trackScale);
 
-	IModel* cubes[5000];
-	Vector temp;
+	IModel* cubes[1000];
+	Vector temp2;
 
-	for (int i = 0, o = 0; i <= trackCurve.size * 200; i++)
+	for (int i = 0, o = 0; i <= trackCurve.size * 50; i++)
 	{
 		cubes[i] = cubeMesh->CreateModel();
 		o = i / 200.0f;
-		temp = trackCurve.posOnCurve(i / 200.0f);
+		temp2 = trackCurve.posOnCurve(i / 50.0f).posVect;
 		cout << "\n";
-		temp.print();
-		temp.move(cubes[i]);
+		temp2.print();
+		temp2.move(cubes[i]);
 		cubes[i]->Scale(0.05);
 	}
 
@@ -253,8 +273,7 @@ void main()
 		/**** Update your scene each frame here ****/
 
 		// getting deltaTime
-		deltaTime = myEngine->Timer();
-
+		
 		if (myEngine->KeyHeld(Key_W)) {
 			myRacer.accMovement(-deltaTime);
 		} 
@@ -281,7 +300,7 @@ void main()
 
 		myRacer.applyVectors(deltaTime);
 
-		
+		deltaTime = myEngine->Timer();
 	}
 
 	// Delete the 3D engine now we are finished with it
