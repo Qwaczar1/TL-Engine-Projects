@@ -11,12 +11,19 @@ using namespace tle;
 
 struct Vector
 {
-	float x;
-	float y;
-	float z;
-	float length;
+	float x = 0;
+	float y = 0;
+	float z = 0;
+	float length = 0;
 
-	void vectorSet(float newX, float newY, float newZ) {
+	Vector(float X = 0, float Y = 0, float Z = 0, float L = 0) {
+		x = X;
+		y = Y;
+		z = Z;
+		length = L;
+	}
+
+	void vectorSet(float newX = 0, float newY = 0, float newZ = 0) {
 		x = newX;
 		y = newY;
 		z = newZ;
@@ -43,6 +50,9 @@ struct Vector
 	Vector addVector(Vector vect) {
 		return { x + vect.x, y + vect.y, z + vect.z };
 	}
+	Vector subtractVector(Vector vect) {
+		return { x - vect.x, y - vect.y, z - vect.z };
+	}
 
 	Vector multiplyVector(float a) {
 		return { x * a, y * a, z * a };
@@ -51,7 +61,7 @@ struct Vector
 	Vector normalize() {
 		getLength();
 		if (length != 0 && length != -0) {
-			Vector normalized{ x / length, y / length, z / length, 1 };
+			Vector normalized = Vector( x / length, y / length, z / length, 1 );
 			//cout << "Normalized Vector x : " << normalized.x << "  y : " << normalized.y << "  z : " << normalized.z;
 			return normalized;
 		}

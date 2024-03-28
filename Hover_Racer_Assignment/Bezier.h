@@ -7,9 +7,10 @@
 
 struct CurvePoint
 {
-	Vector posVect;
+	Vector posVect = Vector(0,0,0);
 	float rotation = 0;
-	Vector facingVect;
+	Vector facingVect = Vector(0, 0, 0);
+	float t;
 };
 
 struct CurveSegment 
@@ -145,20 +146,36 @@ struct Curve
 		float closestDist = pos.findDist(curvePos.posVect);
 		float checkDist;
 		float closest_i = 0;
-		for (int i = 0; i < size * resolution - 1; i++)
+		float closest_i2 = 0;
+		for (int i = 0; i < size * resolution; i++)
 		{
 			checkPos = posOnCurve(i / resolution);
+			//cout << "\ni / resolution = " << i / resolution;
 
 			checkDist = pos.findDist(checkPos.posVect);
 			if (checkDist < closestDist) {
-				closest_i = i;
+				closest_i = i / resolution;
 				closestDist = checkDist;
 				curvePos = checkPos;
 			}
 		}
-		int tInt = closest_i;
-		curvePos = { curvePos.posVect, curvePos.rotation, (curvePos.posVect - posOnCurve(closest_i / resolution - 0.0001).posVect).normalize()};
-		cout << "\n rotation = " << curvePos.rotation;
+		//cout << "\n\n first closest i = " << closest_i << " : " << closest_i / resolution << "\n";
+		closest_i2 = closest_i * resolution;
+		for (int i = 0; i < resolution * 2; i++)
+		{
+			checkPos = posOnCurve(((closest_i2 - 1) / resolution) + i / (resolution * resolution));
+			//cout << "\nSecond i search = " << (((closest_i - 1) / resolution) + i / (resolution * resolution));
+
+			checkDist = pos.findDist(checkPos.posVect);
+			if (checkDist < closestDist) {
+				closest_i = ((closest_i2 - 1) / resolution) + i / (resolution * resolution);
+				closestDist = checkDist;
+				curvePos = checkPos;
+			}
+		}
+		//cout << "\nclosest i = " << closest_i;
+		curvePos = { curvePos.posVect, curvePos.rotation, (curvePos.posVect - posOnCurve(closest_i - 0.0001).posVect).normalize(), closest_i};
+		//cout << "\n rotation = " << curvePos.rotation;
 		return curvePos;
 	}
 };

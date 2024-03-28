@@ -147,12 +147,14 @@ struct particleSyst {
 	}
 
 	void respawnParticle(int i) {
+		particles[i].model->ResetScale();
 		spawnParticles(i);
 	}
 
 	void ageParticles() {
 		for (int i = 0; i < size; i++)
 		{
+			particles[i].model->Scale(0.95);
 			if (particles[i].age >= maxAge) {
 				respawnParticle(i);
 			}

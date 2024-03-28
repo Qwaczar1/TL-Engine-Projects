@@ -2,39 +2,20 @@
   Hover_Racer_Assignment.cpp
 C:\Users\e_sid\Desktop\TL-Engine Projects\Hover_Racer_Assignment\Bezier.h(3,10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
 C:\Users\e_sid\Desktop\TL-Engine Projects\Hover_Racer_Assignment\Bezier.h(4,10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-C:\Users\e_sid\Desktop\TL-Engine Projects\Hover_Racer_Assignment\Bezier.h(34,12): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-C:\Users\e_sid\Desktop\TL-Engine Projects\Hover_Racer_Assignment\Bezier.h(56,12): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-C:\Users\e_sid\Desktop\TL-Engine Projects\Hover_Racer_Assignment\Bezier.h(82,22): warning C4018: '<': signed/unsigned mismatch
-C:\Users\e_sid\Desktop\TL-Engine Projects\Hover_Racer_Assignment\Bezier.h(92,22): warning C4018: '<': signed/unsigned mismatch
-C:\Users\e_sid\Desktop\TL-Engine Projects\Hover_Racer_Assignment\Bezier.h(106,23): warning C4018: '<': signed/unsigned mismatch
-C:\Users\e_sid\Desktop\TL-Engine Projects\Hover_Racer_Assignment\Bezier.h(115,23): warning C4018: '<': signed/unsigned mismatch
-C:\Users\e_sid\Desktop\TL-Engine Projects\Hover_Racer_Assignment\Bezier.h(124,23): warning C4018: '<': signed/unsigned mismatch
-C:\Users\e_sid\Desktop\TL-Engine Projects\Hover_Racer_Assignment\Bezier.h(137,12): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-C:\Users\e_sid\Desktop\TL-Engine Projects\Hover_Racer_Assignment\Bezier.h(154,17): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-C:\Users\e_sid\Desktop\TL-Engine Projects\Hover_Racer_Assignment\Bezier.h(159,12): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-C:\Users\e_sid\Desktop\TL-Engine Projects\Hover_Racer_Assignment\Bezier.h(160,107): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\e_sid\Desktop\TL-Engine Projects\Hover_Racer_Assignment\Hover_Racer_Assignment.cpp(42,102): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\e_sid\Desktop\TL-Engine Projects\Hover_Racer_Assignment\Hover_Racer_Assignment.cpp(48,30): warning C4244: '-=': conversion from 'double' to 'float', possible loss of data
-C:\Users\e_sid\Desktop\TL-Engine Projects\Hover_Racer_Assignment\Hover_Racer_Assignment.cpp(54,15): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\e_sid\Desktop\TL-Engine Projects\Hover_Racer_Assignment\Hover_Racer_Assignment.cpp(224,9): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-TL-Engine2019Debug.lib(TL-Engine.obj) : warning LNK4099: PDB '' was not found with 'TL-Engine2019Debug.lib(TL-Engine.obj)' or at ''; linking object as if no debug info
-TL-Engine2019Debug.lib(Errors.obj) : warning LNK4099: PDB '' was not found with 'TL-Engine2019Debug.lib(Errors.obj)' or at ''; linking object as if no debug info
-TL-Engine2019Debug.lib(TLXSprite.obj) : warning LNK4099: PDB '' was not found with 'TL-Engine2019Debug.lib(TLXSprite.obj)' or at ''; linking object as if no debug info
-TL-Engine2019Debug.lib(TLXSceneNode.obj) : warning LNK4099: PDB '' was not found with 'TL-Engine2019Debug.lib(TLXSceneNode.obj)' or at ''; linking object as if no debug info
-TL-Engine2019Debug.lib(TLXModelNode.obj) : warning LNK4099: PDB '' was not found with 'TL-Engine2019Debug.lib(TLXModelNode.obj)' or at ''; linking object as if no debug info
-TL-Engine2019Debug.lib(TLXModel.obj) : warning LNK4099: PDB '' was not found with 'TL-Engine2019Debug.lib(TLXModel.obj)' or at ''; linking object as if no debug info
-TL-Engine2019Debug.lib(TLXMesh.obj) : warning LNK4099: PDB '' was not found with 'TL-Engine2019Debug.lib(TLXMesh.obj)' or at ''; linking object as if no debug info
-TL-Engine2019Debug.lib(TLXLight.obj) : warning LNK4099: PDB '' was not found with 'TL-Engine2019Debug.lib(TLXLight.obj)' or at ''; linking object as if no debug info
-TL-Engine2019Debug.lib(TLXFont.obj) : warning LNK4099: PDB '' was not found with 'TL-Engine2019Debug.lib(TLXFont.obj)' or at ''; linking object as if no debug info
-TL-Engine2019Debug.lib(TLXEngine.obj) : warning LNK4099: PDB '' was not found with 'TL-Engine2019Debug.lib(TLXEngine.obj)' or at ''; linking object as if no debug info
-TL-Engine2019Debug.lib(TLXCamera.obj) : warning LNK4099: PDB '' was not found with 'TL-Engine2019Debug.lib(TLXCamera.obj)' or at ''; linking object as if no debug info
-TL-Engine2019Debug.lib(IrrlichtSceneNode.obj) : warning LNK4099: PDB '' was not found with 'TL-Engine2019Debug.lib(IrrlichtSceneNode.obj)' or at ''; linking object as if no debug info
-TL-Engine2019Debug.lib(IrrlichtModel.obj) : warning LNK4099: PDB '' was not found with 'TL-Engine2019Debug.lib(IrrlichtModel.obj)' or at ''; linking object as if no debug info
-TL-Engine2019Debug.lib(IrrlichtMesh.obj) : warning LNK4099: PDB '' was not found with 'TL-Engine2019Debug.lib(IrrlichtMesh.obj)' or at ''; linking object as if no debug info
-TL-Engine2019Debug.lib(IrrlichtLight.obj) : warning LNK4099: PDB '' was not found with 'TL-Engine2019Debug.lib(IrrlichtLight.obj)' or at ''; linking object as if no debug info
-TL-Engine2019Debug.lib(IrrlichtInput.obj) : warning LNK4099: PDB '' was not found with 'TL-Engine2019Debug.lib(IrrlichtInput.obj)' or at ''; linking object as if no debug info
-TL-Engine2019Debug.lib(IrrlichtFont.obj) : warning LNK4099: PDB '' was not found with 'TL-Engine2019Debug.lib(IrrlichtFont.obj)' or at ''; linking object as if no debug info
-TL-Engine2019Debug.lib(IrrlichtEngine.obj) : warning LNK4099: PDB '' was not found with 'TL-Engine2019Debug.lib(IrrlichtEngine.obj)' or at ''; linking object as if no debug info
-TL-Engine2019Debug.lib(IrrlichtCamera.obj) : warning LNK4099: PDB '' was not found with 'TL-Engine2019Debug.lib(IrrlichtCamera.obj)' or at ''; linking object as if no debug info
+C:\Users\e_sid\Desktop\TL-Engine Projects\Hover_Racer_Assignment\Bezier.h(35,12): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\e_sid\Desktop\TL-Engine Projects\Hover_Racer_Assignment\Bezier.h(57,12): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\e_sid\Desktop\TL-Engine Projects\Hover_Racer_Assignment\Bezier.h(83,22): warning C4018: '<': signed/unsigned mismatch
+C:\Users\e_sid\Desktop\TL-Engine Projects\Hover_Racer_Assignment\Bezier.h(93,22): warning C4018: '<': signed/unsigned mismatch
+C:\Users\e_sid\Desktop\TL-Engine Projects\Hover_Racer_Assignment\Bezier.h(107,23): warning C4018: '<': signed/unsigned mismatch
+C:\Users\e_sid\Desktop\TL-Engine Projects\Hover_Racer_Assignment\Bezier.h(116,23): warning C4018: '<': signed/unsigned mismatch
+C:\Users\e_sid\Desktop\TL-Engine Projects\Hover_Racer_Assignment\Bezier.h(125,23): warning C4018: '<': signed/unsigned mismatch
+C:\Users\e_sid\Desktop\TL-Engine Projects\Hover_Racer_Assignment\Bezier.h(138,12): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\e_sid\Desktop\TL-Engine Projects\Hover_Racer_Assignment\Bezier.h(177,94): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\e_sid\Desktop\TL-Engine Projects\Hover_Racer_Assignment\Particles.h(56,24): warning C4018: '<': signed/unsigned mismatch
+C:\Users\e_sid\Desktop\TL-Engine Projects\Hover_Racer_Assignment\Hover_Racer_Assignment.cpp(60,35): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\e_sid\Desktop\TL-Engine Projects\Hover_Racer_Assignment\Hover_Racer_Assignment.cpp(65,30): warning C4244: '-=': conversion from 'double' to 'float', possible loss of data
+C:\Users\e_sid\Desktop\TL-Engine Projects\Hover_Racer_Assignment\Hover_Racer_Assignment.cpp(71,15): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\e_sid\Desktop\TL-Engine Projects\Hover_Racer_Assignment\Hover_Racer_Assignment.cpp(79,54): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\e_sid\Desktop\TL-Engine Projects\Hover_Racer_Assignment\Hover_Racer_Assignment.cpp(173,43): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
   Hover_Racer_Assignment.vcxproj -> C:\Users\e_sid\Desktop\TL-Engine Projects\Hover_Racer_Assignment\Hover_Racer_AssignmentDebug.exe
   Copying DLLs & shaders...

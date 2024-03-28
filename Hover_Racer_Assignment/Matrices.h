@@ -22,11 +22,17 @@ struct Matrix2D {
 	
 	void martixFromModel(IModel* model) {
 		model->GetMatrix(&matrix[0][0]);
-		
+	}
+	void martixFromCam(ICamera* cam) {
+		cam->GetMatrix(&matrix[0][0]);
 	}
 
 	void matrixToModel(IModel* model) {
 		model->SetMatrix(matrix[0]);
+	}
+
+	void matrixToCam(ICamera* cam) {
+		cam->SetMatrix(matrix[0]);
 	}
 
 	void print() {
@@ -234,18 +240,18 @@ Matrix2D rotateBy(Matrix2D matrix, Vector rotation) {
 Matrix2D rotateOn(Matrix2D matrix, Vector vect, float angle) {
 	Vector newX = matrix.vectorizeX();
 	newX.rotateOn(vect, angle);
-	cout << "\nnewX: ";
-	newX.print();
+	//cout << "\nnewX: ";
+	//newX.print();
 
 	Vector newY = matrix.vectorizeY();
 	newY.rotateOn(vect, angle);
-	cout << "\nnewY: ";
-	newY.print();
+	//cout << "\nnewY: ";
+	//newY.print();
 
 	Vector newZ = matrix.vectorizeZ();
 	newZ.rotateOn(vect, angle);
-	cout << "\nnewZ: ";
-	newZ.print();
+	//cout << "\nnewZ: ";
+	//newZ.print();
 
 	matrix.matrixFromVectors(newX.normalize(), newY.normalize(), newZ.normalize());
 	return matrix;
@@ -272,8 +278,8 @@ Matrix2D rotateTo(Matrix2D matrix, axis xyz, Vector target) {
 		break;
 	}
 	axis = axis.normalize();
-	cout << "\n\n PreRotation\n";
-	matrix.print();
+	//cout << "\n\n PreRotation\n";
+	//matrix.print();
 	matrix.normalize(xyz);
 	return rotateOn(matrix, axis, -angle);
 }
